@@ -37,7 +37,7 @@
             transform: translateY(0) scale(0.98);
         }
 
-        /* Pulse animation for voice buttons */
+        /* Voice buttons pulse animation */
         @keyframes gentle-pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.08); }
@@ -70,7 +70,7 @@
     <!-- 主測驗卡片容器 -->
     <div class="w-full max-w-2xl bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-8 momonga-card border-4 border-sky-200 relative overflow-hidden my-auto">
         
-        <!-- 背景可愛圖騰裝飾 -->
+        <!-- 背景圖騰裝飾 -->
         <div class="absolute -top-10 -right-10 w-28 h-28 bg-sky-200/50 rounded-full blur-xl pointer-events-none"></div>
         <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-sky-300/30 rounded-full blur-xl pointer-events-none"></div>
 
@@ -135,9 +135,9 @@
                         <i class="fa-solid fa-list-check text-sky-500 mr-1.5"></i> 測驗題數
                     </label>
                     <div class="grid grid-cols-3 gap-3" id="count-group">
-                        <button type="button" data-count="10" class="count-btn active bg-sky-500 text-white font-bold py-3 rounded-2xl border-2 border-sky-500 shadow-md shadow-sky-200">10 題</button>
+                        <button type="button" data-count="5" class="count-btn active bg-sky-500 text-white font-bold py-3 rounded-2xl border-2 border-sky-500 shadow-md shadow-sky-200">5 題</button>
+                        <button type="button" data-count="10" class="count-btn bg-white text-slate-600 font-bold py-3 rounded-2xl border-2 border-sky-200 hover:border-sky-400">10 題</button>
                         <button type="button" data-count="20" class="count-btn bg-white text-slate-600 font-bold py-3 rounded-2xl border-2 border-sky-200 hover:border-sky-400">20 題</button>
-                        <button type="button" data-count="30" class="count-btn bg-white text-slate-600 font-bold py-3 rounded-2xl border-2 border-sky-200 hover:border-sky-400">30 題</button>
                     </div>
                 </div>
             </div>
@@ -151,7 +151,7 @@
         <div id="quiz-screen" class="hidden space-y-5">
             <!-- 進度與得分列 -->
             <div class="flex items-center justify-between text-sm font-bold text-slate-600">
-                <span id="progress-text" class="bg-sky-100 text-sky-700 px-3.5 py-1.5 rounded-full border border-sky-200">第 1 / 10 題</span>
+                <span id="progress-text" class="bg-sky-100 text-sky-700 px-3.5 py-1.5 rounded-full border border-sky-200">第 1 / 5 題</span>
                 <div class="flex items-center gap-3">
                     <span id="streak-tag" class="text-amber-500 hidden bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
                         <i class="fa-solid fa-fire text-amber-500"></i> <span id="streak-count">0</span> 連勝
@@ -178,40 +178,10 @@
                 <p id="word-category" class="text-xs font-bold text-sky-500 tracking-wider uppercase">Unit 1 • 名詞</p>
             </div>
 
-            <!-- 四選一選項列表 -->
-            <div id="options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <!-- 四選一選項列表（由上而下單一欄排列） -->
+            <div id="options-container" class="grid grid-cols-1 gap-3">
                 <!-- 選項按鈕將由 JavaScript 動態呈現 -->
             </div>
-
-            <!-- 即時回饋與解析區塊 -->
-            <div id="feedback-card" class="hidden rounded-2xl p-4 sm:p-5 border-2 transition-all duration-300">
-                <div class="flex items-start gap-3 mb-2">
-                    <div id="feedback-icon" class="text-2xl mt-0.5"></div>
-                    <div>
-                        <h4 id="feedback-title" class="font-bold text-lg">答對了！</h4>
-                        <p id="feedback-meaning" class="text-slate-600 text-sm font-medium"></p>
-                    </div>
-                </div>
-
-                <!-- 例句解說 -->
-                <div id="sentence-box" class="mt-3 pt-3 border-t border-slate-200/80 text-sm">
-                    <div class="flex items-center justify-between text-slate-500 mb-1">
-                        <span class="font-bold text-xs uppercase tracking-wider text-sky-600">
-                            <i class="fa-regular fa-lightbulb text-amber-400 mr-1"></i> 實用雙語例句
-                        </span>
-                        <button id="speak-sentence-btn" class="text-sky-600 hover:text-sky-800 text-xs font-bold flex items-center gap-1 bg-sky-50 hover:bg-sky-100 px-2 py-1 rounded-lg transition">
-                            <i class="fa-solid fa-volume-low"></i> 朗讀例句
-                        </button>
-                    </div>
-                    <p id="sentence-en" class="font-bold text-slate-800">I love my family very much.</p>
-                    <p id="sentence-zh" class="text-slate-500 text-xs sm:text-sm mt-0.5">我很愛我的家庭。</p>
-                </div>
-            </div>
-
-            <!-- 下一題按鈕 -->
-            <button id="next-btn" class="hidden w-full bg-sky-500 hover:bg-sky-600 text-white font-bold text-lg py-3.5 rounded-2xl shadow-lg shadow-sky-200 transition flex items-center justify-center gap-2">
-                下一題 <i class="fa-solid fa-arrow-right"></i>
-            </button>
         </div>
 
         <!-- 畫面 3: 測驗結算與錯題檢討 -->
@@ -233,7 +203,7 @@
                 </div>
                 <div class="pl-2">
                     <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">答對題數</p>
-                    <p id="final-accuracy" class="text-3xl sm:text-4xl font-extrabold text-slate-700 mt-1">10 / 10</p>
+                    <p id="final-accuracy" class="text-3xl sm:text-4xl font-extrabold text-slate-700 mt-1">5 / 5</p>
                 </div>
             </div>
 
@@ -276,7 +246,7 @@
 
             // Unit 2
             { unit: 2, word: "second", meaning: "秒；第二的", category: "名詞", sentenceEn: "Wait a second, please.", sentenceZh: "請稍等一秒鐘。" },
-            { unit: 2, word: "elephant", meaning: "大象", category: "名詞", sentenceEn: "The elephant has a long nose.", sentenceZh: "大象有長長的鼻子。" },
+            { unit: 2, word: "elephant", meaning: "大象", category: "名詞", sentenceEn: "The elephant has a long nose.", sentenceZh: "大象有長長的比子。" },
             { unit: 2, word: "kitchen", meaning: "廚房", category: "名詞", sentenceEn: "Mom is cooking in the kitchen.", sentenceZh: "媽媽正在廚房煮飯。" },
             { unit: 2, word: "holiday", meaning: "節日；假日", category: "名詞", sentenceEn: "Christmas is my favorite holiday.", sentenceZh: "聖誕節是我最喜歡的節日。" },
             { unit: 2, word: "healthy", meaning: "健康的", category: "形容詞", sentenceEn: "Eating apples is healthy for you.", sentenceZh: "吃蘋果對你的健康有益。" },
@@ -297,7 +267,7 @@
             { unit: 4, word: "chocolate", meaning: "巧克力", category: "名詞", sentenceEn: "This chocolate cake tastes sweet.", sentenceZh: "這個巧克力蛋糕嚐起來很甜。" },
             { unit: 4, word: "museum", meaning: "博物館", category: "名詞", sentenceEn: "We visited the museum yesterday.", sentenceZh: "我們昨天參觀了博物館。" },
             { unit: 4, word: "borrow", meaning: "借（入）", category: "動詞", sentenceEn: "May I borrow your pen?", sentenceZh: "我可以借你的筆嗎？" },
-            { unit: 4, word: "bright", meaning: "鮮豔的；明亮的", category: "形容詞", sentenceEn: "The sun is bright today.", sentenceZh: "今天的陽光很明亮。" },
+            { unit: 4, word: "bright", meaning: "鮮豔的；明亮的光", category: "形容詞", sentenceEn: "The sun is bright today.", sentenceZh: "今天的陽光很明亮。" },
             { unit: 4, word: "take care of", meaning: "照顧", category: "片語", sentenceEn: "Please take care of my dog.", sentenceZh: "請照顧我的狗。" },
             { unit: 4, word: "check in", meaning: "辦理入住登記", category: "片語", sentenceEn: "We need to check in at the hotel first.", sentenceZh: "我們需要先在飯店辦理入住。" },
 
@@ -378,10 +348,11 @@
         let currentIndex = 0;
         let score = 0;
         let streak = 0;
-        let selectedCount = 10;
+        let selectedCount = 5;
         let selectedUnit = 'all';
         let wrongAnswers = [];
         let isAnswered = false;
+        let autoNextTimer = null;
 
         // SpeechSynthesis 發音元件
         const synth = window.speechSynthesis;
@@ -406,15 +377,6 @@
         const speakWordBtn = document.getElementById('speak-word-btn');
         const optionsContainer = document.getElementById('options-container');
 
-        const feedbackCard = document.getElementById('feedback-card');
-        const feedbackIcon = document.getElementById('feedback-icon');
-        const feedbackTitle = document.getElementById('feedback-title');
-        const feedbackMeaning = document.getElementById('feedback-meaning');
-        const sentenceEn = document.getElementById('sentence-en');
-        const sentenceZh = document.getElementById('sentence-zh');
-        const speakSentenceBtn = document.getElementById('speak-sentence-btn');
-        const nextBtn = document.getElementById('next-btn');
-
         const finalScore = document.getElementById('final-score');
         const finalAccuracy = document.getElementById('final-accuracy');
         const mistakesContainer = document.getElementById('mistakes-container');
@@ -425,17 +387,11 @@
         window.addEventListener('DOMContentLoaded', () => {
             initCountButtons();
             startBtn.addEventListener('click', startQuiz);
-            nextBtn.addEventListener('click', nextQuestion);
             restartBtn.addEventListener('click', resetQuiz);
 
             speakWordBtn.addEventListener('click', () => {
                 const current = currentQuestions[currentIndex];
                 if (current) playSpeech(current.word, speakWordBtn);
-            });
-
-            speakSentenceBtn.addEventListener('click', () => {
-                const current = currentQuestions[currentIndex];
-                if (current) playSpeech(current.sentenceEn, speakSentenceBtn);
             });
         });
 
@@ -456,6 +412,11 @@
 
         // 開始測驗邏輯
         function startQuiz() {
+            if (autoNextTimer) {
+                clearTimeout(autoNextTimer);
+                autoNextTimer = null;
+            }
+
             selectedUnit = unitSelect.value;
             let filtered = vocabularyData;
 
@@ -497,6 +458,11 @@
 
         // 渲染目前題目
         function renderQuestion() {
+            if (autoNextTimer) {
+                clearTimeout(autoNextTimer);
+                autoNextTimer = null;
+            }
+
             isAnswered = false;
             const item = currentQuestions[currentIndex];
 
@@ -540,10 +506,6 @@
                 btn.addEventListener('click', () => handleAnswer(opt, item, btn));
                 optionsContainer.appendChild(btn);
             });
-
-            // 隱藏反饋與下一題按鈕
-            feedbackCard.classList.add('hidden');
-            nextBtn.classList.add('hidden');
         }
 
         // 處理作答選擇
@@ -557,18 +519,17 @@
             const isCorrect = selected.meaning === correct.meaning;
 
             if (isCorrect) {
-                // 答對處理
+                // 答對處理：高亮綠色，停留 1 秒自動跳下一題
                 score += 10;
                 streak++;
                 selectedBtn.className = `option-btn w-full text-left bg-emerald-50 border-2 border-emerald-400 rounded-2xl p-4 font-bold text-emerald-800 shadow-sm flex items-center justify-between`;
                 selectedBtn.querySelector('i').className = `fa-solid fa-circle-check text-emerald-500 text-xl`;
 
-                feedbackCard.className = `rounded-2xl p-4 sm:p-5 border-2 bg-emerald-50/80 border-emerald-200 text-slate-700 shadow-sm`;
-                feedbackIcon.innerHTML = `<i class="fa-solid fa-face-smile text-emerald-500"></i>`;
-                feedbackTitle.innerText = "答對了！非常棒！";
-                feedbackTitle.className = "font-bold text-lg text-emerald-700";
+                autoNextTimer = setTimeout(() => {
+                    nextQuestion();
+                }, 1000);
             } else {
-                // 答錯處理
+                // 答錯處理：標示錯誤紅色與正確答案，停留 2 秒自動跳下一題
                 streak = 0;
                 wrongAnswers.push(correct);
 
@@ -583,18 +544,10 @@
                     }
                 });
 
-                feedbackCard.className = `rounded-2xl p-4 sm:p-5 border-2 bg-rose-50/80 border-rose-200 text-slate-700 shadow-sm`;
-                feedbackIcon.innerHTML = `<i class="fa-solid fa-circle-exclamation text-rose-500"></i>`;
-                feedbackTitle.innerText = "可惜答錯了！正確意思如下：";
-                feedbackTitle.className = "font-bold text-lg text-rose-700";
+                autoNextTimer = setTimeout(() => {
+                    nextQuestion();
+                }, 2000);
             }
-
-            feedbackMeaning.innerText = `${correct.word} ➔ ${correct.meaning} (${correct.category})`;
-            sentenceEn.innerText = correct.sentenceEn;
-            sentenceZh.innerText = correct.sentenceZh;
-
-            feedbackCard.classList.remove('hidden');
-            nextBtn.classList.remove('hidden');
         }
 
         // 下一題或進入結算
@@ -609,6 +562,11 @@
 
         // 結算頁面展示
         function showResults() {
+            if (autoNextTimer) {
+                clearTimeout(autoNextTimer);
+                autoNextTimer = null;
+            }
+
             progressBar.style.width = "100%";
             quizScreen.classList.add('hidden');
             resultScreen.classList.remove('hidden');
@@ -622,6 +580,9 @@
 
             // 觸發多層次「純藍色系」灑花
             triggerBlueConfetti();
+
+            // 播放歡呼音效
+            playCheerSound();
 
             // 處理錯題檢討清單
             if (wrongAnswers.length > 0) {
@@ -650,6 +611,10 @@
 
         // 重置測驗
         function resetQuiz() {
+            if (autoNextTimer) {
+                clearTimeout(autoNextTimer);
+                autoNextTimer = null;
+            }
             resultScreen.classList.add('hidden');
             setupScreen.classList.remove('hidden');
         }
@@ -686,6 +651,71 @@
                     scalar: 1.2
                 });
             }, 250);
+        }
+
+        // --- Web Audio API 歡呼與勝利音效合成 ---
+        function playCheerSound() {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+
+                // 1. 勝利短音階 (Fanfare Melody: C5 -> E5 -> G5 -> C6)
+                const notes = [
+                    { f: 523.25, start: 0, duration: 0.15 },    // C5
+                    { f: 659.25, start: 0.15, duration: 0.15 },  // E5
+                    { f: 783.99, start: 0.3, duration: 0.15 },   // G5
+                    { f: 1046.50, start: 0.45, duration: 0.65 }  // C6
+                ];
+
+                notes.forEach(note => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.value = note.f;
+
+                    gain.gain.setValueAtTime(0, ctx.currentTime + note.start);
+                    gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + note.start + 0.03);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + note.start + note.duration);
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+
+                    osc.start(ctx.currentTime + note.start);
+                    osc.stop(ctx.currentTime + note.start + note.duration);
+                });
+
+                // 2. 人群歡呼與掌聲模擬聲 (Filtered Noise)
+                const bufferSize = ctx.sampleRate * 2.0; // 2 秒音訊
+                const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1; // 白雜訊
+                }
+
+                const noise = ctx.createBufferSource();
+                noise.buffer = buffer;
+
+                // 帶通濾波器：調製成類似歡呼掌聲的頻率
+                const filter = ctx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.value = 1400;
+                filter.Q.value = 1.2;
+
+                const noiseGain = ctx.createGain();
+                noiseGain.gain.setValueAtTime(0, ctx.currentTime + 0.2);
+                noiseGain.gain.linearRampToValueAtTime(0.22, ctx.currentTime + 0.5);
+                noiseGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2.0);
+
+                noise.connect(filter);
+                filter.connect(noiseGain);
+                noiseGain.connect(ctx.destination);
+
+                noise.start(ctx.currentTime + 0.2);
+                noise.stop(ctx.currentTime + 2.0);
+            } catch (e) {
+                console.log("Audio play error:", e);
+            }
         }
 
         // 英文語音朗讀函式 (Web Speech API)
