@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圖解735國中英語單字複習測驗 - 小桃主題版</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        
+        body {
+            font-family: 'Fredoka', 'Noto Sans TC', sans-serif;
+            background-color: #f0f9ff;
+            background-image: radial-gradient(#bae6fd 1.8px, transparent 1.8px);
+            background-size: 24px 24px;
+        }
+
+        .momonga-card {
+            box-shadow: 0 12px 28px -6px rgba(56, 189, 248, 0.25), 0 8px 10px -6px rgba(2, 132, 199, 0.12);
+        }
+
+        .option-btn {
+            transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 8px 16px -2px rgba(56, 189, 248, 0.35);
+        }
+
+        .option-btn:active:not(:disabled) {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* Pulse animation for voice buttons */
+        @keyframes gentle-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+        .speaking-active {
+            animation: gentle-pulse 1.2s infinite ease-in-out;
+            background-color: #0284c7 !important;
+            color: #ffffff !important;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e0f2fe;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #38bdf8;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0284c7;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-3 sm:p-6 text-slate-700">
+
+    <!-- 主測驗卡片容器 -->
+    <div class="w-full max-w-2xl bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-8 momonga-card border-4 border-sky-200 relative overflow-hidden my-auto">
+        
+        <!-- 背景可愛圖騰裝飾 -->
+        <div class="absolute -top-10 -right-10 w-28 h-28 bg-sky-200/50 rounded-full blur-xl pointer-events-none"></div>
+        <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-sky-300/30 rounded-full blur-xl pointer-events-none"></div>
+
+        <!-- 頂部頁籤/標題 -->
+        <div class="flex items-center justify-between border-b-2 border-sky-100 pb-4 mb-6">
+            <div class="flex items-center gap-2.5">
+                <div class="w-10 h-10 rounded-2xl bg-sky-500 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-sky-200">
+                    <i class="fa-solid fa-cloud"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold text-sky-600 tracking-tight leading-tight">國中英語單字複習</h1>
+                    <p class="text-xs text-sky-400 font-medium">圖解 735 輕鬆讀 • 小桃主題版</p>
+                </div>
+            </div>
+            <span id="badge-mode" class="hidden sm:inline-block bg-sky-100 text-sky-700 font-bold text-xs px-3 py-1.5 rounded-full border border-sky-200">
+                <i class="fa-solid fa-book-open mr-1"></i> Unit 1 ~ 15
+            </span>
+        </div>
+
+        <!-- 畫面 1: 測驗設定區 -->
+        <div id="setup-screen" class="space-y-6">
+            <div class="text-center space-y-2 py-2">
+                <div class="inline-flex items-center gap-2 bg-sky-100/80 text-sky-700 px-4 py-1.5 rounded-full font-bold text-sm">
+                    <i class="fa-solid fa-sparkles text-sky-500"></i> 小桃飛鼠英文測驗關卡
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-800">選擇你想練習的單元</h2>
+                <p class="text-slate-500 text-sm">精選圖解 735 講義核心單字、片語與日常佳句</p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- 單元選單 -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">
+                        <i class="fa-solid fa-layer-group text-sky-500 mr-1.5"></i> 選擇單元範圍
+                    </label>
+                    <select id="unit-select" class="w-full bg-sky-50/70 border-2 border-sky-200 rounded-2xl px-4 py-3.5 text-slate-700 font-bold focus:outline-none focus:border-sky-400 focus:ring-4 focus:ring-sky-100 transition">
+                        <option value="all">🌟 全部單元隨機混合 (Unit 1 - 15)</option>
+                        <option value="1-5">🔹 Unit 1 ~ 5 隨機混合 (第一、二冊)</option>
+                        <option value="6-10">🔹 Unit 6 ~ 10 隨機混合 (第三、四冊)</option>
+                        <option value="11-15">🔹 Unit 11 ~ 15 隨機混合 (第五、六冊)</option>
+                        <option value="1">Unit 1 第一冊上 (家庭親屬、學校、顏色、職業)</option>
+                        <option value="2">Unit 2 第一冊下 (時間、動物、場所、娛樂)</option>
+                        <option value="3">Unit 3 第二冊上 (身體部位、三餐、運動樂器)</option>
+                        <option value="4">Unit 4 第二冊中 (人物、食物、飲料與容器)</option>
+                        <option value="5">Unit 5 第二冊下 (自然景觀、地點、動作)</option>
+                        <option value="6">Unit 6 第三冊上 (季節天氣、學校課程與活動)</option>
+                        <option value="7">Unit 7 第三冊中 (職業、經驗、日常動作)</option>
+                        <option value="8">Unit 8 第三冊下 (地點、服飾用品、交通工具)</option>
+                        <option value="9">Unit 9 第四冊上 (食物餐具、自然、測量單位)</option>
+                        <option value="10">Unit 10 第四冊中 (家禽動物、蔬果、自然)</option>
+                        <option value="11">Unit 11 第四冊下 (感冒症狀、身體部位、性格)</option>
+                        <option value="12">Unit 12 第五冊上 (人物地點、娛樂、生活用品)</option>
+                        <option value="13">Unit 13 第五冊中 (生活用品、運動娛樂、場所)</option>
+                        <option value="14">Unit 14 第五冊下 (生活用品、人物、地點、片語)</option>
+                        <option value="15">Unit 15 第六冊全 (人與行為、方向、進階片語)</option>
+                    </select>
+                </div>
+
+                <!-- 題數選擇 -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">
+                        <i class="fa-solid fa-list-check text-sky-500 mr-1.5"></i> 測驗題數
+                    </label>
+                    <div class="grid grid-cols-3 gap-3" id="count-group">
+                        <button type="button" data-count="10" class="count-btn active bg-sky-500 text-white font-bold py-3 rounded-2xl border-2 border-sky-500 shadow-md shadow-sky-200">10 題</button>
+                        <button type="button" data-count="20" class="count-btn bg-white text-slate-600 font-bold py-3 rounded-2xl border-2 border-sky-200 hover:border-sky-400">20 題</button>
+                        <button type="button" data-count="30" class="count-btn bg-white text-slate-600 font-bold py-3 rounded-2xl border-2 border-sky-200 hover:border-sky-400">30 題</button>
+                    </div>
+                </div>
+            </div>
+
+            <button id="start-btn" class="w-full bg-sky-500 hover:bg-sky-600 active:scale-98 text-white font-bold text-lg py-4 rounded-2xl shadow-lg shadow-sky-300/60 transition flex items-center justify-center gap-2 group">
+                <i class="fa-solid fa-play group-hover:translate-x-1 transition-transform"></i> 開始英語測驗
+            </button>
+        </div>
+
+        <!-- 畫面 2: 測驗進行中 -->
+        <div id="quiz-screen" class="hidden space-y-5">
+            <!-- 進度與得分列 -->
+            <div class="flex items-center justify-between text-sm font-bold text-slate-600">
+                <span id="progress-text" class="bg-sky-100 text-sky-700 px-3.5 py-1.5 rounded-full border border-sky-200">第 1 / 10 題</span>
+                <div class="flex items-center gap-3">
+                    <span id="streak-tag" class="text-amber-500 hidden bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
+                        <i class="fa-solid fa-fire text-amber-500"></i> <span id="streak-count">0</span> 連勝
+                    </span>
+                    <span id="score-text" class="text-sky-600 font-bold">
+                        <i class="fa-solid fa-star text-amber-400"></i> 得分: 0
+                    </span>
+                </div>
+            </div>
+
+            <!-- 進度條 -->
+            <div class="w-full bg-sky-100 h-3 rounded-full overflow-hidden p-0.5 border border-sky-200">
+                <div id="progress-bar" class="bg-sky-400 h-full rounded-full w-0 transition-all duration-300"></div>
+            </div>
+
+            <!-- 題目卡片 -->
+            <div class="bg-sky-50/80 border-2 border-sky-200 rounded-2xl p-6 sm:p-8 text-center relative shadow-inner">
+                <div class="flex items-center justify-center gap-3 mb-2">
+                    <h2 id="word-title" class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-wide">family</h2>
+                    <button id="speak-word-btn" title="聽單字發音" class="w-10 h-10 rounded-full bg-white text-sky-500 hover:text-sky-600 hover:bg-sky-100 flex items-center justify-center shadow-md transition transform hover:scale-110 active:scale-95 border border-sky-200">
+                        <i class="fa-solid fa-volume-high text-lg"></i>
+                    </button>
+                </div>
+                <p id="word-category" class="text-xs font-bold text-sky-500 tracking-wider uppercase">Unit 1 • 名詞</p>
+            </div>
+
+            <!-- 四選一選項列表 -->
+            <div id="options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <!-- 選項按鈕將由 JavaScript 動態呈現 -->
+            </div>
+
+            <!-- 即時回饋與解析區塊 -->
+            <div id="feedback-card" class="hidden rounded-2xl p-4 sm:p-5 border-2 transition-all duration-300">
+                <div class="flex items-start gap-3 mb-2">
+                    <div id="feedback-icon" class="text-2xl mt-0.5"></div>
+                    <div>
+                        <h4 id="feedback-title" class="font-bold text-lg">答對了！</h4>
+                        <p id="feedback-meaning" class="text-slate-600 text-sm font-medium"></p>
+                    </div>
+                </div>
+
+                <!-- 例句解說 -->
+                <div id="sentence-box" class="mt-3 pt-3 border-t border-slate-200/80 text-sm">
+                    <div class="flex items-center justify-between text-slate-500 mb-1">
+                        <span class="font-bold text-xs uppercase tracking-wider text-sky-600">
+                            <i class="fa-regular fa-lightbulb text-amber-400 mr-1"></i> 實用雙語例句
+                        </span>
+                        <button id="speak-sentence-btn" class="text-sky-600 hover:text-sky-800 text-xs font-bold flex items-center gap-1 bg-sky-50 hover:bg-sky-100 px-2 py-1 rounded-lg transition">
+                            <i class="fa-solid fa-volume-low"></i> 朗讀例句
+                        </button>
+                    </div>
+                    <p id="sentence-en" class="font-bold text-slate-800">I love my family very much.</p>
+                    <p id="sentence-zh" class="text-slate-500 text-xs sm:text-sm mt-0.5">我很愛我的家庭。</p>
+                </div>
+            </div>
+
+            <!-- 下一題按鈕 -->
+            <button id="next-btn" class="hidden w-full bg-sky-500 hover:bg-sky-600 text-white font-bold text-lg py-3.5 rounded-2xl shadow-lg shadow-sky-200 transition flex items-center justify-center gap-2">
+                下一題 <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <!-- 畫面 3: 測驗結算與錯題檢討 -->
+        <div id="result-screen" class="hidden text-center space-y-6 py-2">
+            <div class="inline-flex p-4 rounded-full bg-sky-100 text-sky-600 text-5xl mb-1 shadow-inner border border-sky-200">
+                <i id="result-trophy" class="fa-solid fa-trophy text-amber-400"></i>
+            </div>
+            
+            <div>
+                <h2 id="result-title" class="text-3xl font-extrabold text-slate-800">測驗完成！</h2>
+                <p id="result-subtitle" class="text-slate-500 text-sm mt-1">太棒了！小桃為你的學習堅持喝采！</p>
+            </div>
+
+            <!-- 成績統計數據卡 -->
+            <div class="bg-sky-50/80 border-2 border-sky-200 rounded-2xl p-5 grid grid-cols-2 gap-4">
+                <div class="border-r border-sky-200 pr-2">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">總得分</p>
+                    <p id="final-score" class="text-3xl sm:text-4xl font-extrabold text-sky-600 mt-1">100%</p>
+                </div>
+                <div class="pl-2">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">答對題數</p>
+                    <p id="final-accuracy" class="text-3xl sm:text-4xl font-extrabold text-slate-700 mt-1">10 / 10</p>
+                </div>
+            </div>
+
+            <!-- 錯題檢討區 -->
+            <div id="mistakes-container" class="text-left hidden space-y-3">
+                <h3 class="font-bold text-slate-700 flex items-center gap-2 text-sm sm:text-base">
+                    <i class="fa-solid fa-triangle-exclamation text-amber-500"></i> 錯題關卡檢討與複習
+                </h3>
+                <div id="mistakes-list" class="space-y-2.5 max-h-52 overflow-y-auto pr-1">
+                    <!-- 動態生成錯題卡 -->
+                </div>
+            </div>
+
+            <button id="restart-btn" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold text-lg py-4 rounded-2xl shadow-lg shadow-sky-300/60 transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-rotate-right"></i> 重新測驗
+            </button>
+        </div>
+
+    </div>
+
+    <!-- 頁腳 -->
+    <p class="text-xs text-sky-400/80 mt-4 text-center font-bold">
+        圖解 735 國中英語單字複習講義 • 小桃 (Momonga) 主題介面
+    </p>
+
+    <!-- JavaScript 邏輯控制 -->
+    <script>
+        // --- 完整圖解 735 國中英語講義題庫 (Unit 1 ~ Unit 15) ---
+        const vocabularyData = [
+            // Unit 1
+            { unit: 1, word: "family", meaning: "家庭；家人", category: "名詞", sentenceEn: "I love my family very much.", sentenceZh: "我很愛我的家庭。" },
+            { unit: 1, word: "elementary school", meaning: "國小", category: "名詞", sentenceEn: "My sister goes to elementary school.", sentenceZh: "我妹妹讀國小。" },
+            { unit: 1, word: "classmate", meaning: "同班同學", category: "名詞", sentenceEn: "John is my favorite classmate.", sentenceZh: "約翰是我最喜歡的同班同學。" },
+            { unit: 1, word: "notebook", meaning: "筆記本", category: "名詞", sentenceEn: "Write this down in your notebook.", sentenceZh: "把這個記在你的筆記本裡。" },
+            { unit: 1, word: "doctor", meaning: "醫生", category: "名詞", sentenceEn: "The doctor asked me to rest.", sentenceZh: "醫生要我多休息。" },
+            { unit: 1, word: "handsome", meaning: "英俊的", category: "形容詞", sentenceEn: "The actor is very handsome.", sentenceZh: "那位男演員非常英俊。" },
+            { unit: 1, word: "quiet", meaning: "安靜的", category: "形容詞", sentenceEn: "Please be quiet in the library.", sentenceZh: "在圖書館請保持安靜。" },
+            { unit: 1, word: "sit down", meaning: "坐下", category: "片語", sentenceEn: "Please sit down and enjoy the show.", sentenceZh: "請坐下並享受表演。" },
+            { unit: 1, word: "follow the rules", meaning: "遵守規則", category: "片語", sentenceEn: "We should follow the rules at school.", sentenceZh: "我們在學校應該遵守規則。" },
+
+            // Unit 2
+            { unit: 2, word: "second", meaning: "秒；第二的", category: "名詞", sentenceEn: "Wait a second, please.", sentenceZh: "請稍等一秒鐘。" },
+            { unit: 2, word: "elephant", meaning: "大象", category: "名詞", sentenceEn: "The elephant has a long nose.", sentenceZh: "大象有長長的鼻子。" },
+            { unit: 2, word: "kitchen", meaning: "廚房", category: "名詞", sentenceEn: "Mom is cooking in the kitchen.", sentenceZh: "媽媽正在廚房煮飯。" },
+            { unit: 2, word: "holiday", meaning: "節日；假日", category: "名詞", sentenceEn: "Christmas is my favorite holiday.", sentenceZh: "聖誕節是我最喜歡的節日。" },
+            { unit: 2, word: "healthy", meaning: "健康的", category: "形容詞", sentenceEn: "Eating apples is healthy for you.", sentenceZh: "吃蘋果對你的健康有益。" },
+            { unit: 2, word: "popular", meaning: "受歡迎的", category: "形容詞", sentenceEn: "She is a popular singer in Taiwan.", sentenceZh: "她是台灣一位受歡迎的歌手。" },
+            { unit: 2, word: "watch TV", meaning: "看電視", category: "片語", sentenceEn: "They watch TV after dinner.", sentenceZh: "他們吃完晚餐後看電視。" },
+            { unit: 2, word: "take a walk", meaning: "散步", category: "片語", sentenceEn: "Grandpa likes to take a walk in the evening.", sentenceZh: "爺爺喜歡在傍晚散步。" },
+
+            // Unit 3
+            { unit: 3, word: "breakfast", meaning: "早餐", category: "名詞", sentenceEn: "Don't forget to eat breakfast.", sentenceZh: "別忘了吃早餐。" },
+            { unit: 3, word: "basketball", meaning: "籃球", category: "名詞", sentenceEn: "We play basketball every Friday.", sentenceZh: "我們每個星期五打籃球。" },
+            { unit: 3, word: "download", meaning: "下載", category: "動詞", sentenceEn: "You can download the music online.", sentenceZh: "你可以線上下載這首音樂。" },
+            { unit: 3, word: "different", meaning: "不同的", category: "形容詞", sentenceEn: "We have different ideas.", sentenceZh: "我們有不同的想法。" },
+            { unit: 3, word: "crowded", meaning: "擠滿人群的", category: "形容詞", sentenceEn: "The night market is very crowded.", sentenceZh: "夜市非常擠滿人群。" },
+            { unit: 3, word: "wash one's face", meaning: "洗臉", category: "片語", sentenceEn: "I wash my face every morning.", sentenceZh: "我每天早上洗臉。" },
+            { unit: 3, word: "listen to music", meaning: "聽音樂", category: "片語", sentenceEn: "I like to listen to music at home.", sentenceZh: "我喜歡在家聽音樂。" },
+
+            // Unit 4
+            { unit: 4, word: "chocolate", meaning: "巧克力", category: "名詞", sentenceEn: "This chocolate cake tastes sweet.", sentenceZh: "這個巧克力蛋糕嚐起來很甜。" },
+            { unit: 4, word: "museum", meaning: "博物館", category: "名詞", sentenceEn: "We visited the museum yesterday.", sentenceZh: "我們昨天參觀了博物館。" },
+            { unit: 4, word: "borrow", meaning: "借（入）", category: "動詞", sentenceEn: "May I borrow your pen?", sentenceZh: "我可以借你的筆嗎？" },
+            { unit: 4, word: "bright", meaning: "鮮豔的；明亮的", category: "形容詞", sentenceEn: "The sun is bright today.", sentenceZh: "今天的陽光很明亮。" },
+            { unit: 4, word: "take care of", meaning: "照顧", category: "片語", sentenceEn: "Please take care of my dog.", sentenceZh: "請照顧我的狗。" },
+            { unit: 4, word: "check in", meaning: "辦理入住登記", category: "片語", sentenceEn: "We need to check in at the hotel first.", sentenceZh: "我們需要先在飯店辦理入住。" },
+
+            // Unit 5
+            { unit: 5, word: "mountain", meaning: "山", category: "名詞", sentenceEn: "They plan to climb the mountain.", sentenceZh: "他們打算去爬山。" },
+            { unit: 5, word: "department store", meaning: "百貨公司", category: "名詞", sentenceEn: "She bought a bag at the department store.", sentenceZh: "她在百貨公司買了一個包包。" },
+            { unit: 5, word: "hike", meaning: "健行", category: "動詞", sentenceEn: "We go hiking on weekends.", sentenceZh: "我們週末去健行。" },
+            { unit: 5, word: "famous", meaning: "有名的", category: "形容詞", sentenceEn: "Taiwan is famous for night markets.", sentenceZh: "台灣以夜市聞名。" },
+            { unit: 5, word: "around the world", meaning: "全世界", category: "片語", sentenceEn: "He wants to travel around the world.", sentenceZh: "他想環遊世界。" },
+            { unit: 5, word: "fall in love", meaning: "墜入情網", category: "片語", sentenceEn: "They fell in love in Taiwan.", sentenceZh: "他們在台灣墜入情網。" },
+
+            // Unit 6
+            { unit: 6, word: "weather", meaning: "天氣", category: "名詞", sentenceEn: "The weather is very nice today.", sentenceZh: "今天天氣非常好。" },
+            { unit: 6, word: "science", meaning: "科學", category: "名詞", sentenceEn: "Science is my favorite subject.", sentenceZh: "科學是我最喜歡的科目。" },
+            { unit: 6, word: "difficult", meaning: "困難的", category: "形容詞", sentenceEn: "Math can be difficult sometimes.", sentenceZh: "數學有時候可能很困難。" },
+            { unit: 6, word: "call back", meaning: "回電", category: "片語", sentenceEn: "Please ask him to call back.", sentenceZh: "請叫他回電。" },
+            { unit: 6, word: "make up one's mind", meaning: "下定決心", category: "片語", sentenceEn: "She made up her mind to study abroad.", sentenceZh: "她下定決心出國留學。" },
+
+            // Unit 7
+            { unit: 7, word: "dentist", meaning: "牙醫", category: "名詞", sentenceEn: "I go to the dentist twice a year.", sentenceZh: "我一年看兩次牙醫。" },
+            { unit: 7, word: "experience", meaning: "經歷；經驗", category: "名詞", sentenceEn: "Travel gives us valuable experience.", sentenceZh: "旅行給我們寶貴的經驗。" },
+            { unit: 7, word: "decide", meaning: "決定", category: "動詞", sentenceEn: "I can't decide what to eat.", sentenceZh: "我無法決定要吃什麼。" },
+            { unit: 7, word: "successful", meaning: "成功的", category: "形容詞", sentenceEn: "He is a successful businessman.", sentenceZh: "他是一位成功的商人。" },
+            { unit: 7, word: "give up", meaning: "放棄", category: "片語", sentenceEn: "Never give up on your dreams.", sentenceZh: "永遠不要放棄你的夢想。" },
+            { unit: 7, word: "be good at", meaning: "擅長於", category: "片語", sentenceEn: "She is good at playing basketball.", sentenceZh: "她很擅長打籃球。" },
+
+            // Unit 8
+            { unit: 8, word: "hospital", meaning: "醫院", category: "名詞", sentenceEn: "The hospital is near the station.", sentenceZh: "醫院在車站附近。" },
+            { unit: 8, word: "glasses", meaning: "眼鏡", category: "名詞", sentenceEn: "He wears a pair of black glasses.", sentenceZh: "他戴著一副黑色眼鏡。" },
+            { unit: 8, word: "expensive", meaning: "昂貴的", category: "形容詞", sentenceEn: "This car is too expensive.", sentenceZh: "這輛車太貴了。" },
+            { unit: 8, word: "turn left", meaning: "向左轉", category: "片語", sentenceEn: "Turn left at the next corner.", sentenceZh: "在下一個轉角向左轉。" },
+            { unit: 8, word: "take off", meaning: "脫下；起飛", category: "片語", sentenceEn: "Please take off your shoes.", sentenceZh: "請脫下你的鞋子。" },
+
+            // Unit 9
+            { unit: 9, word: "chopsticks", meaning: "筷子", category: "名詞", sentenceEn: "We eat noodles with chopsticks.", sentenceZh: "我們用筷子吃麵。" },
+            { unit: 9, word: "steak", meaning: "牛排", category: "名詞", sentenceEn: "I ordered a medium steak.", sentenceZh: "我點了一份五分熟的牛排。" },
+            { unit: 9, word: "delicious", meaning: "美味的", category: "形容詞", sentenceEn: "This beef soup is delicious.", sentenceZh: "這道牛肉湯非常美味。" },
+            { unit: 9, word: "stay away from", meaning: "遠離", category: "片語", sentenceEn: "Stay away from dangerous places.", sentenceZh: "遠離危險的地方。" },
+
+            // Unit 10
+            { unit: 10, word: "earthquake", meaning: "地震", category: "名詞", sentenceEn: "An earthquake hit Taiwan last night.", sentenceZh: "昨晚台灣發生了地震。" },
+            { unit: 10, word: "rainbow", meaning: "彩虹", category: "名詞", sentenceEn: "Look at the colorful rainbow!", sentenceZh: "看那道五彩繽紛的彩虹！" },
+            { unit: 10, word: "prepare", meaning: "準備", category: "動詞", sentenceEn: "Mom is preparing lunch for us.", sentenceZh: "媽媽正在為我們準備午餐。" },
+            { unit: 10, word: "take a break", meaning: "休息一下", category: "片語", sentenceEn: "Let's take a break for ten minutes.", sentenceZh: "讓我們休息十分鐘吧。" },
+
+            // Unit 11
+            { unit: 11, word: "headache", meaning: "頭痛", category: "名詞", sentenceEn: "I have a bad headache today.", sentenceZh: "我今天頭痛得很厲害。" },
+            { unit: 11, word: "medicine", meaning: "藥", category: "名詞", sentenceEn: "Take this medicine after meals.", sentenceZh: "飯後服用這個藥。" },
+            { unit: 11, word: "comfortable", meaning: "舒適的", category: "形容詞", sentenceEn: "This sofa is very comfortable.", sentenceZh: "這張沙發非常舒適。" },
+            { unit: 11, word: "under the weather", meaning: "身體不舒服", category: "片語", sentenceEn: "I'm feeling under the weather today.", sentenceZh: "我今天覺得身體有點不舒服。" },
+
+            // Unit 12
+            { unit: 12, word: "gym", meaning: "健身房", category: "名詞", sentenceEn: "He exercises at the gym every day.", sentenceZh: "他每天在健身房運動。" },
+            { unit: 12, word: "habit", meaning: "習慣", category: "名詞", sentenceEn: "Reading is a good habit.", sentenceZh: "閱讀是一個好習慣。" },
+            { unit: 12, word: "proud", meaning: "自豪的", category: "形容詞", sentenceEn: "My parents are proud of me.", sentenceZh: "我的父母為我感到自豪。" },
+            { unit: 12, word: "stay in shape", meaning: "保持健康", category: "片語", sentenceEn: "Exercise helps you stay in shape.", sentenceZh: "運動幫助你保持健康體態。" },
+
+            // Unit 13
+            { unit: 13, word: "refrigerator", meaning: "冰箱", category: "名詞", sentenceEn: "Put the milk in the refrigerator.", sentenceZh: "把牛奶放進冰箱。" },
+            { unit: 13, word: "badminton", meaning: "羽毛球", category: "名詞", sentenceEn: "They enjoy playing badminton.", sentenceZh: "他們喜歡打羽毛球。" },
+            { unit: 13, word: "collect", meaning: "收集", category: "動詞", sentenceEn: "He likes to collect stamps.", sentenceZh: "他喜歡收集郵票。" },
+            { unit: 13, word: "show up", meaning: "出現", category: "片語", sentenceEn: "He didn't show up at the party.", sentenceZh: "他沒有出現在派對上。" },
+
+            // Unit 14
+            { unit: 14, word: "dictionary", meaning: "字典", category: "名詞", sentenceEn: "You can look up words in the dictionary.", sentenceZh: "你可以在字典裡查單字。" },
+            { unit: 14, word: "neighbor", meaning: "鄰居", category: "名詞", sentenceEn: "Our neighbor is friendly.", sentenceZh: "我們的鄰居很友善。" },
+            { unit: 14, word: "polite", meaning: "有禮貌的", category: "形容詞", sentenceEn: "It's important to be polite.", sentenceZh: "有禮貌是非常重要的。" },
+            { unit: 14, word: "hang out", meaning: "經常出入；逛街", category: "片語", sentenceEn: "We like to hang out at the mall.", sentenceZh: "我們喜歡在購物中心逛街。" },
+
+            // Unit 15
+            { unit: 15, word: "language", meaning: "語言", category: "名詞", sentenceEn: "English is a global language.", sentenceZh: "英語是一門全球語言。" },
+            { unit: 15, word: "cheer up", meaning: "振作起來", category: "片語", sentenceEn: "Cheer up! Things will get better.", sentenceZh: "振作起來！事情會好轉的。" },
+            { unit: 15, word: "Knowledge is power.", meaning: "知識就是力量。", category: "佳句", sentenceEn: "Remember that knowledge is power.", sentenceZh: "記住，知識就是力量。" }
+        ];
+
+        // --- 狀態管理變數 ---
+        let currentQuestions = [];
+        let currentIndex = 0;
+        let score = 0;
+        let streak = 0;
+        let selectedCount = 10;
+        let selectedUnit = 'all';
+        let wrongAnswers = [];
+        let isAnswered = false;
+
+        // SpeechSynthesis 發音元件
+        const synth = window.speechSynthesis;
+
+        // DOM 元素引用
+        const setupScreen = document.getElementById('setup-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const countButtons = document.querySelectorAll('.count-btn');
+        const unitSelect = document.getElementById('unit-select');
+        const startBtn = document.getElementById('start-btn');
+
+        const progressText = document.getElementById('progress-text');
+        const progressBar = document.getElementById('progress-bar');
+        const scoreText = document.getElementById('score-text');
+        const streakTag = document.getElementById('streak-tag');
+        const streakCount = document.getElementById('streak-count');
+        const badgeMode = document.getElementById('badge-mode');
+
+        const wordTitle = document.getElementById('word-title');
+        const wordCategory = document.getElementById('word-category');
+        const speakWordBtn = document.getElementById('speak-word-btn');
+        const optionsContainer = document.getElementById('options-container');
+
+        const feedbackCard = document.getElementById('feedback-card');
+        const feedbackIcon = document.getElementById('feedback-icon');
+        const feedbackTitle = document.getElementById('feedback-title');
+        const feedbackMeaning = document.getElementById('feedback-meaning');
+        const sentenceEn = document.getElementById('sentence-en');
+        const sentenceZh = document.getElementById('sentence-zh');
+        const speakSentenceBtn = document.getElementById('speak-sentence-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        const finalScore = document.getElementById('final-score');
+        const finalAccuracy = document.getElementById('final-accuracy');
+        const mistakesContainer = document.getElementById('mistakes-container');
+        const mistakesList = document.getElementById('mistakes-list');
+        const restartBtn = document.getElementById('restart-btn');
+
+        // 初始化與事件綁定
+        window.addEventListener('DOMContentLoaded', () => {
+            initCountButtons();
+            startBtn.addEventListener('click', startQuiz);
+            nextBtn.addEventListener('click', nextQuestion);
+            restartBtn.addEventListener('click', resetQuiz);
+
+            speakWordBtn.addEventListener('click', () => {
+                const current = currentQuestions[currentIndex];
+                if (current) playSpeech(current.word, speakWordBtn);
+            });
+
+            speakSentenceBtn.addEventListener('click', () => {
+                const current = currentQuestions[currentIndex];
+                if (current) playSpeech(current.sentenceEn, speakSentenceBtn);
+            });
+        });
+
+        // 選擇題數按鈕事件
+        function initCountButtons() {
+            countButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    countButtons.forEach(b => {
+                        b.classList.remove('active', 'bg-sky-500', 'text-white', 'shadow-md', 'shadow-sky-200');
+                        b.classList.add('bg-white', 'text-slate-600', 'border-sky-200');
+                    });
+                    btn.classList.add('active', 'bg-sky-500', 'text-white', 'shadow-md', 'shadow-sky-200');
+                    btn.classList.remove('bg-white', 'text-slate-600');
+                    selectedCount = parseInt(btn.dataset.count);
+                });
+            });
+        }
+
+        // 開始測驗邏輯
+        function startQuiz() {
+            selectedUnit = unitSelect.value;
+            let filtered = vocabularyData;
+
+            if (selectedUnit === 'all') {
+                filtered = vocabularyData;
+                if (badgeMode) badgeMode.innerHTML = `<i class="fa-solid fa-book-open mr-1"></i> Unit 1 ~ 15`;
+            } else if (selectedUnit.includes('-')) {
+                // 處理 5 個單元隨機混合 (例如 "1-5", "6-10", "11-15")
+                const [start, end] = selectedUnit.split('-').map(Number);
+                filtered = vocabularyData.filter(item => item.unit >= start && item.unit <= end);
+                if (badgeMode) badgeMode.innerHTML = `<i class="fa-solid fa-book-open mr-1"></i> Unit ${start} ~ ${end}`;
+            } else {
+                // 個別單元測驗
+                const unitNum = parseInt(selectedUnit);
+                filtered = vocabularyData.filter(item => item.unit === unitNum);
+                if (badgeMode) badgeMode.innerHTML = `<i class="fa-solid fa-book-open mr-1"></i> Unit ${unitNum}`;
+            }
+
+            if (filtered.length < 4) {
+                // 如果單元題目較少，混合其他題目補充
+                filtered = [...filtered, ...vocabularyData.filter(i => !filtered.includes(i))];
+            }
+
+            // 洗牌並取出指定的題數
+            const shuffled = shuffleArray([...filtered]);
+            currentQuestions = shuffled.slice(0, Math.min(selectedCount, shuffled.length));
+
+            currentIndex = 0;
+            score = 0;
+            streak = 0;
+            wrongAnswers = [];
+
+            setupScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+
+            renderQuestion();
+        }
+
+        // 渲染目前題目
+        function renderQuestion() {
+            isAnswered = false;
+            const item = currentQuestions[currentIndex];
+
+            // 更新標題與資訊
+            progressText.innerText = `第 ${currentIndex + 1} / ${currentQuestions.length} 題`;
+            progressBar.style.width = `${((currentIndex) / currentQuestions.length) * 100}%`;
+            scoreText.innerHTML = `<i class="fa-solid fa-star text-amber-400"></i> 得分: ${score}`;
+
+            if (streak > 1) {
+                streakTag.classList.remove('hidden');
+                streakCount.innerText = streak;
+            } else {
+                streakTag.classList.add('hidden');
+            }
+
+            wordTitle.innerText = item.word;
+            wordCategory.innerText = `Unit ${item.unit} • ${item.category}`;
+
+            // 自動朗讀單字
+            setTimeout(() => {
+                playSpeech(item.word, speakWordBtn);
+            }, 300);
+
+            // 生成 4 個選項 (1 正確 + 3 誘答)
+            const distractors = getRandomDistractors(item, 3);
+            const options = shuffleArray([item, ...distractors]);
+
+            optionsContainer.innerHTML = '';
+            options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `option-btn w-full text-left bg-white border-2 border-sky-100 hover:border-sky-300 rounded-2xl p-4 font-bold text-slate-700 shadow-sm flex items-center justify-between group`;
+                btn.innerHTML = `
+                    <span class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-sm font-bold border border-sky-200 group-hover:bg-sky-500 group-hover:text-white transition">
+                            ${String.fromCharCode(65 + idx)}
+                        </span>
+                        <span class="text-base">${opt.meaning}</span>
+                    </span>
+                    <i class="fa-regular fa-circle text-sky-200 text-lg group-hover:text-sky-400"></i>
+                `;
+                btn.addEventListener('click', () => handleAnswer(opt, item, btn));
+                optionsContainer.appendChild(btn);
+            });
+
+            // 隱藏反饋與下一題按鈕
+            feedbackCard.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+        }
+
+        // 處理作答選擇
+        function handleAnswer(selected, correct, selectedBtn) {
+            if (isAnswered) return;
+            isAnswered = true;
+
+            const allButtons = optionsContainer.querySelectorAll('button');
+            allButtons.forEach(btn => btn.disabled = true);
+
+            const isCorrect = selected.meaning === correct.meaning;
+
+            if (isCorrect) {
+                // 答對處理
+                score += 10;
+                streak++;
+                selectedBtn.className = `option-btn w-full text-left bg-emerald-50 border-2 border-emerald-400 rounded-2xl p-4 font-bold text-emerald-800 shadow-sm flex items-center justify-between`;
+                selectedBtn.querySelector('i').className = `fa-solid fa-circle-check text-emerald-500 text-xl`;
+
+                feedbackCard.className = `rounded-2xl p-4 sm:p-5 border-2 bg-emerald-50/80 border-emerald-200 text-slate-700 shadow-sm`;
+                feedbackIcon.innerHTML = `<i class="fa-solid fa-face-smile text-emerald-500"></i>`;
+                feedbackTitle.innerText = "答對了！非常棒！";
+                feedbackTitle.className = "font-bold text-lg text-emerald-700";
+            } else {
+                // 答錯處理
+                streak = 0;
+                wrongAnswers.push(correct);
+
+                selectedBtn.className = `option-btn w-full text-left bg-rose-50 border-2 border-rose-400 rounded-2xl p-4 font-bold text-rose-800 shadow-sm flex items-center justify-between`;
+                selectedBtn.querySelector('i').className = `fa-solid fa-circle-xmark text-rose-500 text-xl`;
+
+                // 標示正確選項
+                allButtons.forEach(btn => {
+                    if (btn.innerText.includes(correct.meaning)) {
+                        btn.className = `option-btn w-full text-left bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-4 font-bold text-emerald-700 shadow-sm flex items-center justify-between`;
+                        btn.querySelector('i').className = `fa-solid fa-circle-check text-emerald-500 text-xl`;
+                    }
+                });
+
+                feedbackCard.className = `rounded-2xl p-4 sm:p-5 border-2 bg-rose-50/80 border-rose-200 text-slate-700 shadow-sm`;
+                feedbackIcon.innerHTML = `<i class="fa-solid fa-circle-exclamation text-rose-500"></i>`;
+                feedbackTitle.innerText = "可惜答錯了！正確意思如下：";
+                feedbackTitle.className = "font-bold text-lg text-rose-700";
+            }
+
+            feedbackMeaning.innerText = `${correct.word} ➔ ${correct.meaning} (${correct.category})`;
+            sentenceEn.innerText = correct.sentenceEn;
+            sentenceZh.innerText = correct.sentenceZh;
+
+            feedbackCard.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+        }
+
+        // 下一題或進入結算
+        function nextQuestion() {
+            currentIndex++;
+            if (currentIndex < currentQuestions.length) {
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        // 結算頁面展示
+        function showResults() {
+            progressBar.style.width = "100%";
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            const total = currentQuestions.length;
+            const correctCount = total - wrongAnswers.length;
+            const accuracyPercent = Math.round((correctCount / total) * 100);
+
+            finalScore.innerText = `${accuracyPercent}%`;
+            finalAccuracy.innerText = `${correctCount} / ${total}`;
+
+            // 觸發多層次「純藍色系」灑花
+            triggerBlueConfetti();
+
+            // 處理錯題檢討清單
+            if (wrongAnswers.length > 0) {
+                mistakesContainer.classList.remove('hidden');
+                mistakesList.innerHTML = '';
+                wrongAnswers.forEach(item => {
+                    const row = document.createElement('div');
+                    row.className = `bg-white border border-sky-100 rounded-xl p-3 flex items-center justify-between text-sm shadow-sm`;
+                    row.innerHTML = `
+                        <div>
+                            <span class="font-bold text-slate-800">${item.word}</span>
+                            <span class="text-xs text-sky-500 ml-2 font-medium">Unit ${item.unit}</span>
+                            <p class="text-xs text-slate-500 mt-0.5">${item.meaning}</p>
+                        </div>
+                        <button class="review-speak-btn text-sky-500 hover:text-sky-700 bg-sky-50 hover:bg-sky-100 p-2 rounded-lg transition" title="聽發音">
+                            <i class="fa-solid fa-volume-low"></i>
+                        </button>
+                    `;
+                    row.querySelector('.review-speak-btn').addEventListener('click', () => playSpeech(item.word));
+                    mistakesList.appendChild(row);
+                });
+            } else {
+                mistakesContainer.classList.add('hidden');
+            }
+        }
+
+        // 重置測驗
+        function resetQuiz() {
+            resultScreen.classList.add('hidden');
+            setupScreen.classList.remove('hidden');
+        }
+
+        // --- 純藍色系 Confetti 灑花效果 (小桃限定調色) ---
+        function triggerBlueConfetti() {
+            if (typeof confetti !== 'function') return;
+
+            // 純藍色調組合: 極淺雪藍, 天空藍, 寶藍, 皇家純藍, 經典純藍, 靛藍
+            const bluePalette = ['#e0f2fe', '#7dd3fc', '#38bdf8', '#0284c7', '#0052cc', '#0033ff', '#0000d1'];
+
+            // 第一波雙側發射
+            confetti({
+                particleCount: 60,
+                spread: 70,
+                origin: { y: 0.6, x: 0.2 },
+                colors: bluePalette
+            });
+            confetti({
+                particleCount: 60,
+                spread: 70,
+                origin: { y: 0.6, x: 0.8 },
+                colors: bluePalette
+            });
+
+            // 第二波中央高空漫天降落
+            setTimeout(() => {
+                confetti({
+                    particleCount: 80,
+                    angle: 90,
+                    spread: 100,
+                    origin: { y: 0.4 },
+                    colors: bluePalette,
+                    scalar: 1.2
+                });
+            }, 250);
+        }
+
+        // 英文語音朗讀函式 (Web Speech API)
+        function playSpeech(text, buttonEl = null) {
+            if (!('speechSynthesis' in window)) return;
+
+            synth.cancel(); // 停止先前的發音
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9; // 稍微放慢語速
+
+            if (buttonEl) {
+                buttonEl.classList.add('speaking-active');
+                utterance.onend = () => buttonEl.classList.remove('speaking-active');
+                utterance.onerror = () => buttonEl.classList.remove('speaking-active');
+            }
+
+            synth.speak(utterance);
+        }
+
+        // 輔助工具: 取得隨機誘答選項
+        function getRandomDistractors(correctItem, count) {
+            const pool = vocabularyData.filter(item => item.meaning !== correctItem.meaning);
+            return shuffleArray(pool).slice(0, count);
+        }
+
+        // 輔助工具: 洗牌演算法 (Fisher-Yates)
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+    </script>
+</body>
+</html>
