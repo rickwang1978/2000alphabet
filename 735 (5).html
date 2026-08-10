@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圖解735國中英語單字全題庫測驗 - 小桃主題版</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        
+        body {
+            font-family: 'Fredoka', 'Noto Sans TC', sans-serif;
+            background-color: #f0f9ff;
+            background-image: radial-gradient(#bae6fd 1.8px, transparent 1.8px);
+            background-size: 24px 24px;
+        }
+
+        .momonga-card {
+            box-shadow: 0 12px 28px -6px rgba(56, 189, 248, 0.25), 0 8px 10px -6px rgba(2, 132, 199, 0.12);
+        }
+
+        .option-btn {
+            transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 8px 16px -2px rgba(56, 189, 248, 0.35);
+        }
+
+        .option-btn:active:not(:disabled) {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* Voice buttons pulse animation */
+        @keyframes gentle-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+        .speaking-active {
+            animation: gentle-pulse 1.2s infinite ease-in-out;
+            background-color: #0284c7 !important;
+            color: #ffffff !important;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e0f2fe;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #38bdf8;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0284c7;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-3 sm:p-6 text-slate-700">
+
+    <!-- 主測驗卡片容器 -->
+    <div class="w-full max-w-2xl bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-8 momonga-card border-4 border-sky-200 relative overflow-hidden my-auto">
+        
+        <!-- 背景圖騰裝飾 -->
+        <div class="absolute -top-10 -right-10 w-28 h-28 bg-sky-200/50 rounded-full blur-xl pointer-events-none"></div>
+        <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-sky-300/30 rounded-full blur-xl pointer-events-none"></div>
+
+        <!-- 頂部頁籤/標題 -->
+        <div class="flex items-center justify-between border-b-2 border-sky-100 pb-4 mb-6">
+            <div class="flex items-center gap-2.5">
+                <div class="w-10 h-10 rounded-2xl bg-sky-500 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-sky-200">
+                    <i class="fa-solid fa-cloud"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold text-sky-600 tracking-tight leading-tight">國中英語單字複習</h1>
+                    <p class="text-xs text-sky-400 font-medium">圖解 735 全題庫 (1,200+字) • 小桃主題版</p>
+                </div>
+            </div>
+            <span id="badge-mode" class="hidden sm:inline-block bg-sky-100 text-sky-700 font-bold text-xs px-3 py-1.5 rounded-full border border-sky-200">
+                <i class="fa-solid fa-book-open mr-1"></i> Unit 1 ~ 15 無刪減全題庫
+            </span>
+        </div>
+
+        <!-- 畫面 1: 測驗設定區 -->
+        <div id="setup-screen" class="space-y-6">
+            <div class="text-center space-y-2 py-2">
+                <div class="inline-flex items-center gap-2 bg-sky-100/80 text-sky-700 px-4 py-1.5 rounded-full font-bold text-sm">
+                    <i class="fa-solid fa-sparkles text-sky-500"></i> 小桃飛鼠英文測驗關卡
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-800">選擇你想練習的單元</h2>
+                <p class="text-slate-500 text-sm">完整收錄：名詞、動詞、形容詞、副詞、介系詞、片語與佳句</p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- 單元選單 -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">
+                        <i class="fa-solid fa-layer-group text-sky-500 mr-1.5"></i> 選擇單元範圍
+                    </label>
+                    <select id="unit-select" class="w-full bg-sky-50/70 border-2 border-sky-200 rounded-2xl px-4 py-3.5 text-slate-700 font-bold focus:outline-none focus:border-sky-400 focus:ring-4 focus:ring-sky-100 transition">
+                        <option value="all">🌟 全部單元隨機混合 (Unit 1 - 15 全題庫 1200+題)</option>
+                        <option value="1-5">🔹 Unit 1 ~ 5 隨機混合 (第一、二冊)</option>
+                        <option value="6-10">🔹 Unit 6 ~ 10 隨機混合 (第三、四冊)</option>
+                        <option value="11-15">🔹 Unit 11 ~ 15 隨機混合 (第五、六冊)</option>
+                        <option value="1">Unit 1 第一冊上 (家庭親屬、學校、顏色、職業)</option>
+                        <option value="2">Unit 2 第一冊下 (時間、動物、場所、娛樂)</option>
+                        <option value="3">Unit 3 第二冊上 (身體部位、三餐、運動樂器)</option>
+                        <option value="4">Unit 4 第二冊中 (人物、食物、飲料與容器)</option>
+                        <option value="5">Unit 5 第二冊下 (自然景觀、地點、動作)</option>
+                        <option value="6">Unit 6 第三冊上 (季節天氣、學校課程與活動)</option>
+                        <option value="7">Unit 7 第三冊中 (職業、經驗、日常動作)</option>
+                        <option value="8">Unit 8 第三冊下 (地點、服飾用品、交通工具)</option>
+                        <option value="9">Unit 9 第四冊上 (食物餐具、自然、測量單位)</option>
+                        <option value="10">Unit 10 第四冊中 (家禽動物、蔬果、自然)</option>
+                        <option value="11">Unit 11 第四冊下 (感冒症狀、身體部位、性格)</option>
+                        <option value="12">Unit 12 第五冊上 (人物地點、娛樂、生活用品)</option>
+                        <option value="13">Unit 13 第五冊中 (生活用品、運動娛樂、場所)</option>
+                        <option value="14">Unit 14 第五冊下 (生活用品、人物、地點、片語)</option>
+                        <option value="15">Unit 15 第六冊全 (人與行為、方向、進階片語與佳句)</option>
+                    </select>
+                </div>
+
+                <!-- 題數選擇 -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">
+                        <i class="fa-solid fa-list-check text-sky-500 mr-1.5"></i> 測驗題數
+                    </label>
+                    <div class="grid grid-cols-3 gap-3" id="count-group">
+                        <button type="button" data-count="5" class="count-btn active bg-sky-500 text-white font-bold py-3 rounded-2xl border-2 border-sky-500 shadow-md shadow-sky-200">5 題</button>
+                        <button type="button" data-count="10" class="count-btn bg-white text-slate-600 font-bold py-3 rounded-2xl border-2 border-sky-200 hover:border-sky-400">10 題</button>
+                        <button type="button" data-count="20" class="count-btn bg-white text-slate-600 font-bold py-3 rounded-2xl border-2 border-sky-200 hover:border-sky-400">20 題</button>
+                    </div>
+                </div>
+            </div>
+
+            <button id="start-btn" class="w-full bg-sky-500 hover:bg-sky-600 active:scale-98 text-white font-bold text-lg py-4 rounded-2xl shadow-lg shadow-sky-300/60 transition flex items-center justify-center gap-2 group">
+                <i class="fa-solid fa-play group-hover:translate-x-1 transition-transform"></i> 開始英語測驗
+            </button>
+        </div>
+
+        <!-- 畫面 2: 測驗進行中 -->
+        <div id="quiz-screen" class="hidden space-y-5">
+            <!-- 進度與得分列 -->
+            <div class="flex items-center justify-between text-sm font-bold text-slate-600">
+                <span id="progress-text" class="bg-sky-100 text-sky-700 px-3.5 py-1.5 rounded-full border border-sky-200">第 1 / 5 題</span>
+                <div class="flex items-center gap-3">
+                    <span id="streak-tag" class="text-amber-500 hidden bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
+                        <i class="fa-solid fa-fire text-amber-500"></i> <span id="streak-count">0</span> 連勝
+                    </span>
+                    <span id="score-text" class="text-sky-600 font-bold">
+                        <i class="fa-solid fa-star text-amber-400"></i> 得分: 0
+                    </span>
+                </div>
+            </div>
+
+            <!-- 進度條 -->
+            <div class="w-full bg-sky-100 h-3 rounded-full overflow-hidden p-0.5 border border-sky-200">
+                <div id="progress-bar" class="bg-sky-400 h-full rounded-full w-0 transition-all duration-300"></div>
+            </div>
+
+            <!-- 題目卡片 -->
+            <div class="bg-sky-50/80 border-2 border-sky-200 rounded-2xl p-6 sm:p-8 text-center relative shadow-inner">
+                <div class="flex items-center justify-center gap-3 mb-2">
+                    <h2 id="word-title" class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-wide">family</h2>
+                    <button id="speak-word-btn" title="聽單字發音" class="w-10 h-10 rounded-full bg-white text-sky-500 hover:text-sky-600 hover:bg-sky-100 flex items-center justify-center shadow-md transition transform hover:scale-110 active:scale-95 border border-sky-200">
+                        <i class="fa-solid fa-volume-high text-lg"></i>
+                    </button>
+                </div>
+                <p id="word-category" class="text-xs font-bold text-sky-500 tracking-wider uppercase">Unit 1 • 名詞</p>
+            </div>
+
+            <!-- 四選一選項列表（單欄由上而下） -->
+            <div id="options-container" class="grid grid-cols-1 gap-3">
+                <!-- 選項按鈕將由 JavaScript 動態呈現 -->
+            </div>
+        </div>
+
+        <!-- 畫面 3: 測驗結算與錯題檢討 -->
+        <div id="result-screen" class="hidden text-center space-y-6 py-2">
+            <div class="inline-flex p-4 rounded-full bg-sky-100 text-sky-600 text-5xl mb-1 shadow-inner border border-sky-200">
+                <i id="result-trophy" class="fa-solid fa-trophy text-amber-400"></i>
+            </div>
+            
+            <div>
+                <h2 id="result-title" class="text-3xl font-extrabold text-slate-800">測驗完成！</h2>
+                <p id="result-subtitle" class="text-slate-500 text-sm mt-1">太棒了！小桃為你的學習堅持喝采！</p>
+            </div>
+
+            <!-- 成績統計數據卡 -->
+            <div class="bg-sky-50/80 border-2 border-sky-200 rounded-2xl p-5 grid grid-cols-2 gap-4">
+                <div class="border-r border-sky-200 pr-2">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">總得分</p>
+                    <p id="final-score" class="text-3xl sm:text-4xl font-extrabold text-sky-600 mt-1">100%</p>
+                </div>
+                <div class="pl-2">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">答對題數</p>
+                    <p id="final-accuracy" class="text-3xl sm:text-4xl font-extrabold text-slate-700 mt-1">5 / 5</p>
+                </div>
+            </div>
+
+            <!-- 錯題檢討區 -->
+            <div id="mistakes-container" class="text-left hidden space-y-3">
+                <h3 class="font-bold text-slate-700 flex items-center gap-2 text-sm sm:text-base">
+                    <i class="fa-solid fa-triangle-exclamation text-amber-500"></i> 錯題關卡檢討與複習
+                </h3>
+                <div id="mistakes-list" class="space-y-2.5 max-h-52 overflow-y-auto pr-1">
+                    <!-- 動態生成錯題卡 -->
+                </div>
+            </div>
+
+            <button id="restart-btn" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold text-lg py-4 rounded-2xl shadow-lg shadow-sky-300/60 transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-rotate-right"></i> 重新測驗
+            </button>
+        </div>
+
+    </div>
+
+    <!-- 頁腳 -->
+    <p class="text-xs text-sky-400/80 mt-4 text-center font-bold">
+        圖解 735 國中英語單字複習講義 • 全單元全詞性無刪減版
+    </p>
+
+    <!-- JavaScript 邏輯控制與完整 Word 題庫 -->
+    <script>
+        // --- 完整圖解 735 國中英語講義全題庫 (無刪減收錄 Unit 1 ~ Unit 15 全單元、全詞性、片語與佳句) ---
+        const rawVocabData = [
+            // ================= Unit 1 (第一冊上：家庭親屬、學校、顏色、職業、房屋、動詞、形容詞、介系詞/副詞、片語與佳句) =================
+            [1, "family", "家庭；家人", "名詞"], [1, "baby", "嬰兒", "名詞"], [1, "boy", "男孩", "名詞"], [1, "girl", "女孩", "名詞"], [1, "man", "男人", "名詞"], [1, "woman", "女人", "名詞"],
+            [1, "person", "人", "名詞"], [1, "people", "人們", "名詞"], [1, "guy", "傢伙", "名詞"], [1, "grandfather", "祖父", "名詞"], [1, "grandmother", "祖母", "名詞"], [1, "father", "爸爸", "名詞"],
+            [1, "mother", "媽媽", "名詞"], [1, "uncle", "叔父;伯父", "名詞"], [1, "aunt", "姑姑;伯母", "名詞"], [1, "sister", "姊;妹", "名詞"], [1, "brother", "兄;弟", "名詞"], [1, "me", "我", "代名詞"],
+            [1, "cousin", "堂(表)兄弟姊妹", "名詞"], [1, "husband", "丈夫", "名詞"], [1, "wife", "妻子", "名詞"], [1, "daughter", "女兒", "名詞"], [1, "son", "兒子", "名詞"],
+            [1, "school", "學校", "名詞"], [1, "elementary school", "國小", "名詞"], [1, "junior high school", "國中", "名詞"], [1, "teacher", "老師", "名詞"], [1, "student", "學生", "名詞"],
+            [1, "classmate", "同班同學", "名詞"], [1, "friend", "朋友", "名詞"], [1, "classroom", "教室", "名詞"], [1, "class", "班級；（一堂）課", "名詞"], [1, "marker", "記號筆；馬克筆", "名詞"],
+            [1, "pen", "筆", "名詞"], [1, "pencil case", "鉛筆盒", "名詞"], [1, "eraser", "橡皮擦", "名詞"], [1, "ruler", "尺; 統治者", "名詞"], [1, "book", "書本", "名詞"], [1, "comic book", "漫畫書", "名詞"],
+            [1, "number", "數字; 號碼", "名詞"], [1, "notebook", "筆記本；筆記型電腦", "名詞"], [1, "desk", "書桌", "名詞"], [1, "color", "顏色", "名詞"], [1, "black", "黑色（的）", "名詞/形容詞"],
+            [1, "brown", "棕色（的）", "名詞/形容詞"], [1, "blue", "藍色（的）", "名詞/形容詞"], [1, "gray", "灰色（的）", "名詞/形容詞"], [1, "green", "綠色（的）", "名詞/形容詞"], [1, "orange", "橘色（的）", "名詞/形容詞"],
+            [1, "pink", "粉紅色（的）", "名詞/形容詞"], [1, "purple", "紫色（的）", "名詞/形容詞"], [1, "red", "紅色（的）", "名詞/形容詞"], [1, "white", "白色（的）", "名詞/形容詞"], [1, "yellow", "黃色（的）", "名詞/形容詞"],
+            [1, "doctor", "醫生", "名詞"], [1, "housewife", "家庭主婦", "名詞"], [1, "nurse", "護士", "名詞"], [1, "office worker", "上班族", "名詞"], [1, "police officer", "警察", "名詞"],
+            [1, "singer", "歌手", "名詞"], [1, "writer", "作家", "名詞"], [1, "cook", "廚師", "名詞/動詞"], [1, "bed", "床", "名詞"], [1, "chair", "椅子", "名詞"], [1, "clock", "時鐘", "名詞"],
+            [1, "door", "門", "名詞"], [1, "sofa", "沙發", "名詞"], [1, "table", "桌子；目錄", "名詞"], [1, "wall", "牆壁", "名詞"], [1, "name", "名字", "名詞"], [1, "sign", "號誌 ; 招牌", "名詞/動詞"],
+            [1, "card", "卡片", "名詞"], [1, "doll", "洋娃娃", "名詞"], [1, "each other", "彼此", "代名詞/片語"], [1, "picture", "照片; 圖片", "名詞"], [1, "turn", "機會; 輪流; 轉彎", "名詞/動詞"],
+            [1, "umbrella", "雨傘", "名詞"], [1, "watch", "手錶", "名詞"], [1, "check", "檢查；核對", "動詞"], [1, "fight", "打架；爭鬥", "動詞/名詞"], [1, "follow", "跟隨；遵守", "動詞"],
+            [1, "go", "去；變得", "動詞"], [1, "have", "擁有；吃喝", "動詞"], [1, "hurry", "急忙", "動詞"], [1, "look", "看；看起來", "動詞"], [1, "open", "打開", "動詞/形容詞"],
+            [1, "read", "閱讀；唸", "動詞"], [1, "talk", "說話；談話", "動詞"], [1, "say", "說", "動詞"], [1, "see", "看見", "動詞"], [1, "thank", "感謝", "動詞"], [1, "use", "使用", "動詞"],
+            [1, "wait", "等待", "動詞"], [1, "wake", "醒來；叫醒", "動詞"], [1, "wash", "洗", "動詞"], [1, "run", "跑；流動", "動詞"], [1, "handsome", "英俊的", "形容詞"],
+            [1, "beautiful", "美麗的", "形容詞"], [1, "small", "小的", "形容詞"], [1, "old", "舊的；老的", "形容詞"], [1, "right", "右邊的；正確的", "形容詞/副詞"], [1, "careful", "小心的", "形容詞"],
+            [1, "special", "特別的", "形容詞"], [1, "favorite", "最喜愛的", "形容詞"], [1, "hungry", "餓的", "形容詞"], [1, "bad", "壞的", "形容詞"], [1, "good", "好的", "形容詞"],
+            [1, "fine", "好的；晴朗的", "形容詞"], [1, "big", "大的", "形容詞"], [1, "new", "新的", "形容詞"], [1, "dear", "親愛的", "形容詞"], [1, "quiet", "安靜的", "形容詞"],
+            [1, "tall", "高的", "形容詞"], [1, "safe", "安全的", "形容詞"], [1, "sorry", "抱歉的；遺憾的", "形容詞"], [1, "happy", "快樂的；高興的", "形容詞"], [1, "sad", "傷心的", "形容詞"],
+            [1, "young", "年輕的", "形容詞"], [1, "very", "非常", "副詞"], [1, "too", "也；太", "副詞"], [1, "really", "真地", "副詞"], [1, "maybe", "可能", "副詞"], [1, "sure", "當然", "副詞"],
+            [1, "now", "現在", "副詞"], [1, "again", "再次", "副詞"], [1, "for", "給；為了", "介系詞"], [1, "from", "來自", "介系詞"], [1, "of", "～的", "介系詞"], [1, "to", "往～；向～", "介系詞"],
+            [1, "with", "跟; 和～一起", "介系詞"], [1, "and", "和；而且", "連接詞"], [1, "but", "但是", "連接詞"], [1, "please", "請；拜託", "感嘆詞"], [1, "hello", "哈囉", "感嘆詞"],
+            [1, "welcome", "歡迎", "感嘆詞/動詞"], [1, "good-bye", "再見", "感嘆詞"], [1, "for you", "給你", "片語"], [1, "~ year(s) old", "～歲", "片語"], [1, "sit down", "坐下", "片語"],
+            [1, "stand up", "站起來", "片語"], [1, "go to school", "上學", "片語"], [1, "on time", "準時", "片語"], [1, "study English", "研讀英文", "片語"], [1, "jump rope", "跳繩", "片語"],
+            [1, "do one’s homework", "做功課", "片語"], [1, "read a book", "看書", "片語"], [1, "ride a bicycle", "騎腳踏車", "片語"], [1, "follow the rules", "遵守規則", "片語"],
+            [1, "break the rules", "違反規則", "片語"], [1, "look at", "看著某人事物", "片語"], [1, "How are you doing?", "你好嗎？", "佳句"], [1, "What’s up?", "最近在忙什麼？", "佳句"],
+            [1, "What about...?", "～怎麼樣？", "佳句"], [1, "Welcome to...", "歡迎來到～", "佳句"], [1, "I’m doing great.", "我很好。", "佳句"], [1, "No way!", "不會吧！／不可能！", "佳句"],
+            [1, "Wrong again.", "又錯了。", "佳句"], [1, "Not really", "不全然是。", "佳句"], [1, "Of course", "當然。", "佳句"], [1, "Never mind.", "沒關係；不用介意。", "佳句"], [1, "I see.", "我知道了。", "佳句"],
+
+            // ================= Unit 2 (第一冊下：時間、動物、場所、娛樂、動詞、形容詞、副詞、介系詞、片語與佳句) =================
+            [2, "time", "次數", "名詞"], [2, "second", "秒；第二（的）", "名詞/形容詞"], [2, "minute", "分鐘", "名詞"], [2, "hour", "小時", "名詞"], [2, "date", "日期；約會", "名詞/動詞"],
+            [2, "today", "今天", "名詞/副詞"], [2, "day", "一日;白天", "名詞"], [2, "morning", "早上", "名詞"], [2, "afternoon", "下午", "名詞"], [2, "evening", "傍晚", "名詞"], [2, "night", "夜晚", "名詞"],
+            [2, "week", "週", "名詞"], [2, "Monday", "星期一", "名詞"], [2, "Tuesday", "星期二", "名詞"], [2, "Wednesday", "星期三", "名詞"], [2, "Thursday", "星期四", "名詞"], [2, "Friday", "星期五", "名詞"],
+            [2, "Saturday", "星期六", "名詞"], [2, "Sunday", "星期日", "名詞"], [2, "month", "月份", "名詞"], [2, "January", "一月", "名詞"], [2, "February", "二月", "名詞"], [2, "March", "三月", "名詞"],
+            [2, "April", "四月", "名詞"], [2, "May", "五月", "名詞"], [2, "June", "六月", "名詞"], [2, "July", "七月", "名詞"], [2, "August", "八月", "名詞"], [2, "September", "九月", "名詞"],
+            [2, "October", "十月", "名詞"], [2, "November", "十一月", "名詞"], [2, "December", "十二月", "名詞"], [2, "year", "年", "名詞"], [2, "animal", "動物", "名詞"], [2, "cow", "牛；乳牛", "名詞"],
+            [2, "lion", "獅子", "名詞"], [2, "elephant", "大象", "名詞"], [2, "tiger", "老虎", "名詞"], [2, "zebra", "斑馬", "名詞"], [2, "monkey", "猴子", "名詞"], [2, "rat", "老鼠", "名詞"],
+            [2, "fox", "狐狸", "名詞"], [2, "horse", "馬", "名詞"], [2, "bear", "熊", "名詞/動詞"], [2, "bug", "蟲子", "名詞"], [2, "bird", "鳥", "名詞"], [2, "cat", "貓", "名詞"], [2, "dog", "狗", "名詞"],
+            [2, "fish", "魚", "名詞/動詞"], [2, "pig", "豬", "名詞"], [2, "rabbit", "兔子", "名詞"], [2, "house", "房子；家", "名詞"], [2, "living room", "客廳", "名詞"], [2, "kitchen", "廚房", "名詞"],
+            [2, "bedroom", "臥室", "名詞"], [2, "dining room", "飯廳", "名詞"], [2, "bathroom", "浴室；廁所", "名詞"], [2, "home", "家", "名詞/副詞"], [2, "zoo", "動物園", "名詞"], [2, "park", "公園；停放", "名詞/動詞"],
+            [2, "place", "地方", "名詞"], [2, "music", "音樂", "名詞"], [2, "video", "影片", "名詞"], [2, "concert", "音樂會", "名詞"], [2, "band", "樂團", "名詞"], [2, "movie", "電影", "名詞"],
+            [2, "party", "派對", "名詞"], [2, "TV", "電視", "名詞"], [2, "holiday", "節日；假日", "名詞"], [2, "birthday", "生日", "名詞"], [2, "New Year’s Eve", "元旦前夕", "名詞"],
+            [2, "Thanksgiving", "感恩節", "名詞"], [2, "Christmas", "聖誕節", "名詞"], [2, "kiss", "親吻", "名詞/動詞"], [2, "mud", "泥巴", "名詞"], [2, "king", "國王", "名詞"], [2, "line", "隊伍；線條", "名詞/動詞"],
+            [2, "blow", "吹", "動詞"], [2, "drink", "喝", "動詞/名詞"], [2, "eat", "吃", "動詞"], [2, "help", "幫忙", "動詞/名詞"], [2, "meet", "遇見；碰面", "動詞"], [2, "report", "報導", "動詞/名詞"],
+            [2, "sleep", "睡覺", "動詞/名詞"], [2, "walk", "走路", "動詞/名詞"], [2, "healthy", "健康的", "形容詞"], [2, "cute", "可愛的", "形容詞"], [2, "lovely", "美好的", "形容詞"],
+            [2, "lucky", "幸運的", "形容詞"], [2, "popular", "受歡迎的", "形容詞"], [2, "ready", "準備好的", "形容詞"], [2, "important", "重要的", "形容詞"], [2, "also", "也；此外", "副詞"],
+            [2, "together", "一起", "副詞"], [2, "inside", "在...裡面", "介系詞"], [2, "under", "在...下面", "介系詞"], [2, "behind", "在...後面", "介系詞"], [2, "near", "在...附近", "介系詞"],
+            [2, "next to", "在...旁邊", "介系詞"], [2, "between", "在...之間", "介系詞"], [2, "in front of", "在...前面", "介系詞"], [2, "above", "在...上方", "介系詞"], [2, "before", "在...之前", "介系詞"],
+            [2, "shake hands", "握手", "片語"], [2, "watch TV", "看電視", "片語"], [2, "see a movie", "看電影", "片語"], [2, "take a look", "看一看", "片語"], [2, "take a picture", "拍照", "片語"],
+            [2, "take a walk", "散步", "片語"], [2, "for fun", "為了好玩", "片語"], [2, "Here we are.", "我們到了。", "佳句"], [2, "Have a good time.", "祝你玩得愉快。", "佳句"],
+            [2, "Watch out!", "小心！", "佳句"], [2, "Say cheese!", "笑一個！", "佳句"], [2, "Take it easy.", "放輕鬆。", "佳句"],
+
+            // ================= Unit 3 (第二冊上：身體部位、三餐/地點、運動樂器、動詞、頻率副詞、片語與佳句) =================
+            [3, "back", "背部", "名詞"], [3, "body", "身體", "名詞"], [3, "face", "臉", "名詞"], [3, "hair", "頭髮", "名詞"], [3, "lip", "嘴唇", "名詞"], [3, "tooth", "牙齒", "名詞"],
+            [3, "eye", "眼睛", "名詞"], [3, "head", "頭", "名詞"], [3, "nose", "鼻子", "名詞"], [3, "ear", "耳朵", "名詞"], [3, "arm", "手臂", "名詞"], [3, "mouth", "嘴巴", "名詞"],
+            [3, "leg", "腿", "名詞"], [3, "hand", "手", "名詞"], [3, "knee", "膝蓋", "名詞"], [3, "foot", "腳", "名詞"], [3, "breakfast", "早餐", "名詞"], [3, "lunch", "午餐", "名詞"],
+            [3, "dinner", "晚餐", "名詞"], [3, "library", "圖書館", "名詞"], [3, "shop", "商店", "名詞/動詞"], [3, "baseball", "棒球", "名詞"], [3, "basketball", "籃球", "名詞"],
+            [3, "dance", "跳舞；舞蹈", "動詞/名詞"], [3, "exercise", "運動", "名詞/動詞"], [3, "game", "遊戲；比賽", "名詞"], [3, "kite", "風箏", "名詞"], [3, "player", "選手；球員", "名詞"],
+            [3, "sport", "運動", "名詞"], [3, "guitar", "吉他", "名詞"], [3, "piano", "鋼琴", "名詞"], [3, "song", "歌曲", "名詞"], [3, "computer", "電腦", "名詞"],
+            [3, "homework", "作業", "名詞"], [3, "shower", "淋浴", "名詞/動詞"], [3, "sound", "聲音", "名詞/動詞"], [3, "trouble", "麻煩", "名詞"], [3, "brush", "刷（牙；油漆）", "動詞"],
+            [3, "change", "改變；交換", "動詞/名詞"], [3, "close", "關閉", "動詞/形容詞"], [3, "join", "參加", "動詞"], [3, "paint", "畫圖；油漆", "動詞/名詞"], [3, "hurt", "使受傷；疼痛", "動詞"],
+            [3, "practice", "練習", "動詞/名詞"], [3, "save", "拯救；節省", "動詞"], [3, "download", "下載", "動詞"], [3, "upload", "上傳", "動詞"], [3, "swim", "游泳", "動詞"],
+            [3, "different", "不同的", "形容詞"], [3, "crowded", "擠滿人群的", "形容詞"], [3, "early", "早的", "形容詞/副詞"], [3, "late", "晚的", "形容詞/副詞"], [3, "strong", "強壯的", "形容詞"],
+            [3, "tired", "疲累的", "形容詞"], [3, "always", "總是", "副詞"], [3, "usually", "通常", "副詞"], [3, "often", "時常", "副詞"], [3, "sometimes", "有時候", "副詞"],
+            [3, "seldom", "很少", "副詞"], [3, "never", "從未", "副詞"], [3, "once", "一次；曾經", "副詞"], [3, "twice", "兩次", "副詞"], [3, "get up", "起床", "片語"],
+            [3, "wash one's face", "洗臉", "片語"], [3, "brush one's teeth", "刷牙", "片語"], [3, "make the bed", "鋪床", "片語"], [3, "play sports", "做運動", "片語"], [3, "fly a kite", "放風箏", "片語"],
+            [3, "listen to music", "聽音樂", "片語"], [3, "walk the dog", "遛狗", "片語"], [3, "check out", "借書", "片語"], [3, "by the way", "順帶一提", "片語"], [3, "Good for you!", "你真棒！", "佳句"],
+            [3, "Give me a break.", "饒了我吧。", "佳句"], [3, "I don’t get it.", "我不懂。", "佳句"], [3, "It’s on me.", "我請客。", "佳句"],
+
+            // ================= Unit 4 (第二冊中：人物、食物、飲料、容器、動詞、形容詞、片語與佳句) =================
+            [4, "kid", "小孩", "名詞"], [4, "teenager", "青少年", "名詞"], [4, "relative", "親戚", "名詞"], [4, "art", "美術；藝術", "名詞"], [4, "museum", "博物館", "名詞"],
+            [4, "painting", "畫作", "名詞"], [4, "food", "食物", "名詞"], [4, "cake", "蛋糕", "名詞"], [4, "candy", "糖果", "名詞"], [4, "chocolate", "巧克力", "名詞"],
+            [4, "cookie", "餅乾", "名詞"], [4, "egg", "蛋", "名詞"], [4, "flour", "麵粉", "名詞"], [4, "fruit", "水果", "名詞"], [4, "hamburger", "漢堡", "名詞"],
+            [4, "pie", "派", "名詞"], [4, "pizza", "披薩", "名詞"], [4, "popcorn", "爆米花", "名詞"], [4, "salad", "沙拉", "名詞"], [4, "salt", "鹽", "名詞"],
+            [4, "sandwich", "三明治", "名詞"], [4, "snack", "點心", "名詞"], [4, "soup", "湯", "名詞"], [4, "sugar", "糖", "名詞"], [4, "coffee", "咖啡", "名詞"],
+            [4, "juice", "果汁", "名詞"], [4, "milk", "牛奶", "名詞"], [4, "tea", "茶", "名詞"], [4, "water", "水", "名詞"], [4, "bag", "袋子", "名詞"],
+            [4, "bottle", "瓶子", "名詞"], [4, "bowl", "碗", "名詞"], [4, "can", "罐子；能夠", "名詞/助動詞"], [4, "plate", "盤子", "名詞"], [4, "glass", "玻璃杯", "名詞"],
+            [4, "cup", "杯", "名詞"], [4, "dollar", "元", "名詞"], [4, "flower", "花", "名詞"], [4, "street", "街道", "名詞"], [4, "tree", "樹", "名詞"],
+            [4, "borrow", "借（入）", "動詞"], [4, "clean", "打掃；清潔", "動詞/形容詞"], [4, "enjoy", "享受；喜愛", "動詞"], [4, "get", "得到", "動詞"], [4, "lend", "借（出）", "動詞"],
+            [4, "need", "需要", "動詞"], [4, "bright", "鮮豔的；明量的", "形容詞"], [4, "dark", "黑的；暗的", "形容詞"], [4, "easy", "容易的", "形容詞"], [4, "hot", "熱的", "形容詞"],
+            [4, "sweet", "甜的", "形容詞"], [4, "thirsty", "口渴的", "形容詞"], [4, "yummy", "好吃的", "形容詞"], [4, "check in", "辦理入住登記", "片語"], [4, "for here", "內用", "片語"],
+            [4, "to go", "外帶", "片語"], [4, "take care of", "照顧", "片語"], [4, "in other words", "換句話說", "片語"], [4, "All is well.", "一切順心。", "佳句"],
+            [4, "That's sweet of you.", "你真貼心。", "佳句"], [4, "My treat.", "我請客。", "佳句"],
+
+            // ================= Unit 5 (第二冊下：自然景觀、地點、食物、動詞、形容詞、時間/地點片語與佳句) =================
+            [5, "beach", "海灘", "名詞"], [5, "hill", "山丘", "名詞"], [5, "mountain", "山", "名詞"], [5, "lake", "湖泊", "名詞"], [5, "island", "島嶼", "名詞"],
+            [5, "moon", "月亮", "名詞"], [5, "river", "河流", "名詞"], [5, "sea", "海", "名詞"], [5, "world", "世界", "名詞"], [5, "airport", "機場", "名詞"],
+            [5, "bookstore", "書店", "名詞"], [5, "church", "教堂", "名詞"], [5, "department store", "百貨公司", "名詞"], [5, "farm", "農場", "名詞"], [5, "market", "市場", "名詞"],
+            [5, "playground", "遊樂場；操場", "名詞"], [5, "post office", "郵局", "名詞"], [5, "station", "車站", "名詞"], [5, "supermarket", "超市", "名詞"], [5, "temple", "寺廟", "名詞"],
+            [5, "theater", "戲院", "名詞"], [5, "chicken", "雞肉", "名詞"], [5, "rice", "米飯", "名詞"], [5, "oil", "油", "名詞"], [5, "age", "年紀；年齡", "名詞"],
+            [5, "money", "錢", "名詞"], [5, "trash", "垃圾", "名詞"], [5, "travel", "旅行", "名詞/動詞"], [5, "build", "建造", "動詞"], [5, "climb", "爬", "動詞"],
+            [5, "hike", "健行", "動詞"], [5, "die", "死亡", "動詞"], [5, "drive", "駕駛", "動詞"], [5, "fly", "飛行", "動詞"], [5, "happen", "發生", "動詞"],
+            [5, "hide", "躲藏", "動詞"], [5, "live", "居住", "動詞"], [5, "ride", "騎；乘", "動詞"], [5, "sell", "賣", "動詞"], [5, "visit", "拜訪", "動詞"],
+            [5, "busy", "忙碌的", "形容詞"], [5, "famous", "有名的", "形容詞"], [5, "warm", "溫暖的", "形容詞"], [5, "around the world", "全世界", "片語"],
+            [5, "fall in love", "墜入情網", "片語"], [5, "climb a mountain", "爬山", "片語"], [5, "get together", "團聚", "片語"], [5, "take a rest", "休息一下", "片語"],
+            [5, "When in Rome, do as the Romans do.", "入境隨俗。", "佳句"], [5, "You rock!", "你超強的！", "佳句"],
+
+            // ================= Unit 6 (第三冊上：季節天氣、學校課程、玩具娛樂、動詞、形容詞、電話用語與佳句) =================
+            [6, "spring", "春天", "名詞"], [6, "summer", "夏天", "名詞"], [6, "autumn", "秋天", "名詞"], [6, "winter", "冬天", "名詞"], [6, "weather", "天氣", "名詞"],
+            [6, "cloud", "雲", "名詞"], [6, "wind", "風", "名詞"], [6, "sun", "太陽", "名詞"], [6, "season", "季節", "名詞"], [6, "lesson", "課；課程", "名詞"],
+            [6, "subject", "學科；主題", "名詞"], [6, "Chinese", "中文；中國人", "名詞"], [6, "history", "歷史", "名詞"], [6, "math", "數學", "名詞"], [6, "PE", "體育", "名詞"],
+            [6, "science", "科學", "名詞"], [6, "club", "社團", "名詞"], [6, "festival", "節慶", "名詞"], [6, "joke", "笑話", "名詞"], [6, "robot", "機器人", "名詞"],
+            [6, "soccer", "足球", "名詞"], [6, "toy", "玩具", "名詞"], [6, "trip", "旅行", "名詞"], [6, "vacation", "假期", "名詞"], [6, "engineer", "工程師", "名詞"],
+            [6, "health", "健康", "名詞"], [6, "jacket", "夾克", "名詞"], [6, "gift", "禮物", "名詞"], [6, "postcard", "明信片", "名詞"], [6, "buy", "購買", "動詞"],
+            [6, "call", "打電話；呼叫", "動詞"], [6, "finish", "完成；結束", "動詞"], [6, "give", "給予", "動詞"], [6, "learn", "學習", "動詞"], [6, "hear", "聽見", "動詞"],
+            [6, "order", "點餐；訂貨", "動詞"], [6, "send", "寄；送", "動詞"], [6, "snow", "下雪", "動詞/名詞"], [6, "speak", "講話", "動詞"], [6, "start", "開始", "動詞"],
+            [6, "teach", "教導", "動詞"], [6, "write", "寫", "動詞"], [6, "cloudy", "多雲的", "形容詞"], [6, "cold", "冷的", "形容詞"], [6, "rainy", "下雨的", "形容詞"],
+            [6, "snowy", "下雪的", "形容詞"], [6, "sunny", "陽光普照的", "形容詞"], [6, "windy", "風大的", "形容詞"], [6, "difficult", "困難的", "形容詞"],
+            [6, "interesting", "有趣的", "形容詞"], [6, "mad", "生氣的", "形容詞"], [6, "strange", "奇怪的", "形容詞"], [6, "call back", "回電", "片語"],
+            [6, "make up one's mind", "下定決心", "片語"], [6, "for free", "免費", "片語"], [6, "How interesting!", "真有趣！", "佳句"],
+
+            // ================= Unit 7 (第三冊中：職業、經驗、房屋設施、動詞、形容詞、習慣片語與佳句) =================
+            [7, "job", "工作", "名詞"], [7, "boss", "老闆", "名詞"], [7, "dentist", "牙醫", "名詞"], [7, "farmer", "農夫", "名詞"], [7, "fisherman", "漁夫", "名詞"],
+            [7, "lawyer", "律師", "名詞"], [7, "clerk", "店員", "名詞"], [7, "reporter", "記者", "名詞"], [7, "worker", "工人", "名詞"], [7, "secretary", "秘書", "名詞"],
+            [7, "soldier", "士兵", "名詞"], [7, "driver", "司機", "名詞"], [7, "mail carrier", "郵差", "名詞"], [7, "dream", "夢想", "名詞/動詞"], [7, "experience", "經歷；經驗", "名詞/動詞"],
+            [7, "pet", "寵物", "名詞"], [7, "country", "國家；鄉下", "名詞"], [7, "factory", "工廠", "名詞"], [7, "clothes", "衣服", "名詞"], [7, "future", "未來", "名詞/形容詞"],
+            [7, "past", "過去", "名詞/形容詞"], [7, "become", "成為", "動詞"], [7, "believe", "相信", "動詞"], [7, "break", "打破；損壞", "動詞/名詞"], [7, "catch", "捉；接", "動詞"],
+            [7, "decide", "決定", "動詞"], [7, "dry", "弄乾", "動詞/形容詞"], [7, "feed", "餵養", "動詞"], [7, "find", "找到", "動詞"], [7, "fix", "修理；解決", "動詞"],
+            [7, "grow", "種植；成長", "動詞"], [7, "hope", "希望", "動詞/名詞"], [7, "keep", "持續；保持", "動詞"], [7, "laugh", "笑；嘲笑", "動詞/名詞"], [7, "plan", "規劃；打算", "動詞/名詞"],
+            [7, "remember", "記得", "動詞"], [7, "sweep", "掃", "動詞"], [7, "try", "嘗試", "動詞"], [7, "worry", "擔心", "動詞"], [7, "scared", "害怕的", "形容詞"],
+            [7, "successful", "成功的", "形容詞"], [7, "terrible", "可怕的；糟糕的", "形容詞"], [7, "be good at", "擅長於", "片語"], [7, "give up", "放棄", "片語"],
+            [7, "fall asleep", "睡著", "片語"], [7, "stay up", "熬夜", "片語"], [7, "Good job!", "做得好！", "佳句"], [7, "Cool down.", "冷靜下來。", "佳句"],
+
+            // ================= Unit 8 (第三冊下：地點、服飾用品、金錢交通、動詞、形容詞、方向片語與佳句) =================
+            [8, "area", "區域", "名詞"], [8, "bank", "銀行；河岸", "名詞"], [8, "block", "街區", "名詞"], [8, "bus stop", "公車站", "名詞"], [8, "city", "城市", "名詞"],
+            [8, "corner", "轉角；角落", "名詞"], [8, "ground", "地面", "名詞"], [8, "hospital", "醫院", "名詞"], [8, "hotel", "飯店", "名詞"], [8, "mall", "購物中心", "名詞"],
+            [8, "pool", "水池", "名詞"], [8, "road", "道路", "名詞"], [8, "metro station", "捷運站", "名詞"], [8, "hat", "帽子", "名詞"], [8, "ring", "戒指", "名詞/動詞"],
+            [8, "T-shirt", "T恤", "名詞"], [8, "skirt", "裙子", "名詞"], [8, "coat", "外套", "名詞"], [8, "glasses", "眼鏡", "名詞"], [8, "pants", "長褲", "名詞"],
+            [8, "mask", "口罩；面具", "名詞"], [8, "sweater", "毛衣", "名詞"], [8, "jeans", "牛仔褲", "名詞"], [8, "shoes", "鞋子", "名詞"], [8, "socks", "襪子", "名詞"],
+            [8, "airplane", "飛機", "名詞"], [8, "bicycle", "腳踏車", "名詞"], [8, "bus", "公車", "名詞"], [8, "boat", "小船", "名詞"], [8, "ship", "大船", "名詞"],
+            [8, "car", "汽車", "名詞"], [8, "traffic", "交通", "名詞"], [8, "taxi", "計程車", "名詞"], [8, "motorcycle", "機車", "名詞"], [8, "spend", "花費", "動詞"],
+            [8, "ask", "請求；詢問", "動詞"], [8, "cut", "切割", "動詞"], [8, "hit", "碰撞", "動詞"], [8, "jog", "慢跑", "動詞"], [8, "cost", "花費", "動詞/名詞"],
+            [8, "wear", "穿；戴", "動詞"], [8, "pay", "付費", "動詞"], [8, "dress", "打扮", "動詞/名詞"], [8, "move", "搬遷；移動", "動詞"], [8, "cheap", "便宜的", "形容詞"],
+            [8, "expensive", "昂貴的", "形容詞"], [8, "fast", "快的", "形容詞/副詞"], [8, "lost", "迷路的", "形容詞"], [8, "turn left", "向左轉", "片語"], [8, "take off", "脫下；起飛", "片語"],
+            [8, "on foot", "步行", "片語"], [8, "on sale", "特價中", "片語"], [8, "Excuse me.", "請問；借過", "佳句"], [8, "Have a nice day.", "祝你有愉快的一天。", "佳句"],
+
+            // ================= Unit 9 (第四冊上：食物餐具、自然、測量單位、動詞、連官動詞、形容詞與片語) =================
+            [9, "beef", "牛肉", "名詞"], [9, "bread", "麵包", "名詞"], [9, "butter", "奶油", "名詞"], [9, "cheese", "乳酪", "名詞"], [9, "chopsticks", "筷子", "名詞"],
+            [9, "dish", "菜餚；盤子", "名詞"], [9, "fries", "薯條", "名詞"], [9, "ham", "火腿", "名詞"], [9, "knife", "刀", "名詞"], [9, "meat", "肉", "名詞"],
+            [9, "menu", "菜單", "名詞"], [9, "noodle", "麵", "名詞"], [9, "pork", "豬肉", "名詞"], [9, "spoon", "湯匙", "名詞"], [9, "steak", "牛排", "名詞"],
+            [9, "toast", "吐司", "名詞"], [9, "ant", "螞蟻", "名詞"], [9, "bee", "蜜蜂", "名詞"], [9, "earth", "地球", "名詞"], [9, "grass", "草地", "名詞"],
+            [9, "insect", "昆蟲", "名詞"], [9, "rock", "岩石", "名詞"], [9, "snake", "蛇", "名詞"], [9, "spider", "蜘蛛", "名詞"], [9, "gram", "公克", "名詞"],
+            [9, "kilogram", "公斤", "名詞"], [9, "mile", "英里", "名詞"], [9, "waiter", "服務生", "名詞"], [9, "agree", "同意", "動詞"], [9, "bite", "咬", "動詞/名詞"],
+            [9, "feel", "感到", "動詞"], [9, "forget", "忘記", "動詞"], [9, "kick", "踢", "動詞/名詞"], [9, "kill", "殺死", "動詞"], [9, "raise", "飼養；舉起", "動詞"],
+            [9, "smell", "聞起來", "動詞/名詞"], [9, "sound", "聽起來", "動詞/名詞"], [9, "taste", "嚐起來", "動詞/名詞"], [9, "tell", "告訴", "動詞"],
+            [9, "convenient", "便利的", "形容詞"], [9, "delicious", "美味的", "形容詞"], [9, "dangerous", "危險的", "形容詞"], [9, "friendly", "友善的", "形容詞"],
+            [9, "real", "真實的", "形容詞"], [9, "wet", "潮濕的", "形容詞"], [9, "stay away from", "遠離", "片語"], [9, "try on", "試穿", "片語"],
+            [9, "give a hand", "幫助", "片語"], [9, "Thank goodness!", "感謝老天！", "佳句"],
+
+            // ================= Unit 10 (第四冊中：家禽動物、蔬果、自然、動詞、形容詞、副詞與片語) =================
+            [10, "duck", "鴨", "名詞"], [10, "frog", "青蛙", "名詞"], [10, "goose", "鵝", "名詞"], [10, "goat", "山羊", "名詞"], [10, "sheep", "綿羊", "名詞"],
+            [10, "turtle", "烏龜", "名詞"], [10, "banana", "香蕉", "名詞"], [10, "bean", "豆", "名詞"], [10, "grape", "葡萄", "名詞"], [10, "guava", "芭樂", "名詞"],
+            [10, "orange", "橘子", "名詞"], [10, "papaya", "木瓜", "名詞"], [10, "peach", "桃子", "名詞"], [10, "pear", "梨子", "名詞"], [10, "strawberry", "草莓", "名詞"],
+            [10, "tomato", "番茄", "名詞"], [10, "vegetable", "蔬菜", "名詞"], [10, "watermelon", "西瓜", "名詞"], [10, "space", "空間", "名詞"], [10, "earthquake", "地震", "名詞"],
+            [10, "garden", "花園", "名詞"], [10, "pond", "池塘", "名詞"], [10, "rainbow", "彩虹", "名詞"], [10, "rose", "玫瑰花", "名詞"], [10, "star", "星星", "名詞"],
+            [10, "typhoon", "颱風", "名詞"], [10, "balcony", "陽臺", "名詞"], [10, "break", "休息", "名詞/動詞"], [10, "candle", "蠟燭", "名詞"], [10, "news", "新聞", "名詞"],
+            [10, "noise", "噪音", "名詞"], [10, "choose", "選擇", "動詞"], [10, "face", "面對", "動詞/名詞"], [10, "pick", "摘採；撿拾", "動詞"], [10, "prepare", "準備", "動詞"],
+            [10, "share", "分享", "動詞"], [10, "shine", "閃耀", "動詞"], [10, "brave", "勇敢的", "形容詞"], [10, "dirty", "髒的", "形容詞"], [10, "giant", "巨大的", "形容詞"],
+            [10, "noisy", "喧鬧的", "形容詞"], [10, "pretty", "漂亮的", "形容詞"], [10, "quick", "快的", "形容詞"], [10, "slow", "緩慢的", "形容詞"], [10, "weak", "虛弱的", "形容詞"],
+            [10, "wise", "明智的", "形容詞"], [10, "take a break", "休息一下", "片語"], [10, "face the fear", "面對恐懼", "片語"], [10, "try one's best", "盡最大努力", "片語"],
+            [10, "No problem.", "沒問題。", "佳句"],
+
+            // ================= Unit 11 (第四冊下：感冒症狀、身體部位、動詞、形容詞、健康片語與佳句) =================
+            [11, "sore throat", "喉嚨痛", "名詞"], [11, "runny nose", "流鼻水", "名詞"], [11, "fever", "發燒", "名詞"], [11, "cold", "感冒", "名詞/形容詞"], [11, "headache", "頭痛", "名詞"],
+            [11, "stomachache", "胃痛", "名詞"], [11, "medicine", "藥", "名詞"], [11, "finger", "手指", "名詞"], [11, "nail", "指甲", "名詞"], [11, "neck", "脖子", "名詞"],
+            [11, "shoulder", "肩膀", "名詞"], [11, "care", "照顧", "名詞/動詞"], [11, "example", "範例", "名詞"], [11, "adult", "成年人", "名詞"], [11, "grade", "成績", "名詞"],
+            [11, "group", "團體", "名詞"], [11, "member", "成員", "名詞"], [11, "mistake", "錯誤", "名詞"], [11, "test", "考試", "名詞"], [11, "allow", "允許", "動詞"],
+            [11, "begin", "開始", "動詞"], [11, "bring", "帶來", "動詞"], [11, "celebrate", "慶祝", "動詞"], [11, "cough", "咳嗽", "動詞"], [11, "count", "計算", "動詞"],
+            [11, "explain", "解釋", "動詞"], [11, "expect", "期待", "動詞"], [11, "fail", "不及格；失敗", "動詞"], [11, "pass", "通過；傳遞", "動詞"], [11, "push", "推；迫使", "動詞"],
+            [11, "throw", "丟；投擲", "動詞"], [11, "win", "贏", "動詞"], [11, "able", "有能力的", "形容詞"], [11, "afraid", "害怕的", "形容詞"], [11, "comfortable", "舒適的", "形容詞"],
+            [11, "excellent", "優秀的", "形容詞"], [11, "fresh", "新鮮的", "形容詞"], [11, "honest", "誠實的", "形容詞"], [11, "sick", "生病的", "形容詞"], [11, "simple", "簡單的", "形容詞"],
+            [11, "smart", "聰明的", "形容詞"], [11, "useful", "有用的", "形容詞"], [11, "under the weather", "身體不舒服", "片語"], [11, "have a cold", "感冒", "片語"],
+            [11, "take medicine", "吃藥", "片語"], [11, "get well", "康復", "片語"], [11, "What's the matter?", "怎麼了？", "佳句"], [11, "No worries.", "不用擔心。", "佳句"],
+
+            // ================= Unit 12 (第五冊上：人物地點、生活用品、心理感受、動詞、形容詞、片語與佳句) =================
+            [12, "actor", "演員", "名詞"], [12, "actress", "女演員", "名詞"], [12, "star", "明星", "名詞"], [12, "parent", "雙親之一", "名詞"], [12, "castle", "城堡", "名詞"],
+            [12, "gym", "健身房", "名詞"], [12, "senior high school", "高中", "名詞"], [12, "drum", "鼓", "名詞"], [12, "joy", "樂趣；喜悅", "名詞"], [12, "letter", "信", "名詞"],
+            [12, "newspaper", "報紙", "名詞"], [12, "photo", "照片", "名詞"], [12, "ticket", "票", "名詞"], [12, "towel", "毛巾", "名詞"], [12, "stamp", "郵票", "名詞"],
+            [12, "culture", "文化", "名詞"], [12, "diet", "飲食", "名詞"], [12, "ghost", "鬼", "名詞"], [12, "habit", "習慣", "名詞"], [12, "heart", "心臟", "名詞"],
+            [12, "Internet", "網路", "名詞"], [12, "lie", "謊言", "名詞/動詞"], [12, "sentence", "句子", "名詞"], [12, "wish", "祝福", "名詞/動詞"], [12, "act", "表演", "動詞"],
+            [12, "cheat", "作弊", "動詞"], [12, "copy", "複製；抄襲", "動詞"], [12, "dig", "挖掘", "動詞"], [12, "guess", "猜測", "動詞"], [12, "spell", "拼字", "動詞"],
+            [12, "surprise", "使驚訝", "動詞"], [12, "touch", "觸動", "動詞"], [12, "understand", "理解", "動詞"], [12, "angry", "生氣的", "形容詞"], [12, "bored", "感到無聊的", "形容詞"],
+            [12, "crazy", "瘋狂的", "形容詞"], [12, "excited", "感到興奮的", "形容詞"], [12, "proud", "自豪的", "形容詞"], [12, "serious", "嚴重的", "形容詞"], [12, "slim", "苗條的", "形容詞"],
+            [12, "stay in shape", "保持健康體態", "片語"], [12, "be proud of", "以...為榮", "片語"], [12, "lose weight", "減重", "片語"], [12, "Guess what?", "你猜怎麼了？", "佳句"],
+            [12, "I’m all ears.", "洗耳恭聽。", "佳句"],
+
+            // ================= Unit 13 (第五冊中：生活用品、運動樂器、場所地點、動詞、形容詞、片語與佳句) =================
+            [13, "basket", "籃子", "名詞"], [13, "bench", "長椅", "名詞"], [13, "blackboard", "黑板", "名詞"], [13, "cellphone", "手機", "名詞"], [13, "chalk", "粉筆", "名詞"],
+            [13, "couch", "沙發", "名詞"], [13, "fan", "風扇", "名詞"], [13, "gate", "大門", "名詞"], [13, "glue", "膠水", "名詞"], [13, "key", "鑰匙", "名詞"],
+            [13, "lamp", "檯燈", "名詞"], [13, "machine", "機器", "名詞"], [13, "note", "紙條", "名詞"], [13, "pot", "鍋子", "名詞"], [13, "refrigerator", "冰箱", "名詞"],
+            [13, "screen", "螢幕", "名詞"], [13, "tool", "工具", "名詞"], [13, "wallet", "錢包", "名詞"], [13, "tennis", "網球", "名詞"], [13, "badminton", "羽毛球", "名詞"],
+            [13, "slide", "滑梯", "名詞"], [13, "seesaw", "翹翹板", "名詞"], [13, "swing", "鞦韆", "名詞"], [13, "yard", "庭院", "名詞"], [13, "company", "公司", "名詞"],
+            [13, "bridge", "橋", "名詞"], [13, "dozen", "一打", "名詞"], [13, "list", "清單", "名詞"], [13, "pocket", "口袋", "名詞"], [13, "program", "節目；計畫", "名詞"],
+            [13, "seed", "種子", "名詞"], [13, "bake", "烘焙", "動詞"], [13, "boil", "煮沸", "動詞"], [13, "carry", "攜帶", "動詞"], [13, "collect", "收集", "動詞"],
+            [13, "enter", "進入", "動詞"], [13, "fill", "裝滿", "動詞"], [13, "knock", "敲", "動詞"], [13, "land", "著陸", "動詞"], [13, "pray", "祈禱", "動詞"],
+            [13, "miss", "想念；錯過", "動詞"], [13, "smile", "微笑", "動詞/名詞"], [13, "modern", "現代的", "形容詞"], [13, "rich", "富有的", "形容詞"], [13, "show up", "出現", "片語"],
+            [13, "in time", "及時", "片語"], [13, "With pleasure.", "很榮幸。", "佳句"],
+
+            // ================= Unit 14 (第五冊下：生活用品、人物、地點、動詞、形容詞、進階片語與佳句) =================
+            [14, "bow", "蝴蝶結；弓", "名詞"], [14, "camera", "相機", "名詞"], [14, "dictionary", "字典", "名詞"], [14, "paper", "紙", "名詞"], [14, "present", "禮物", "名詞"],
+            [14, "tape", "膠帶", "名詞"], [14, "uniform", "制服", "名詞"], [14, "neighbor", "鄰居", "名詞"], [14, "foreigner", "外國人", "名詞"], [14, "businessman", "商人", "名詞"],
+            [14, "stranger", "陌生人", "名詞"], [14, "apartment", "公寓", "名詞"], [14, "bakery", "麵包店", "名詞"], [14, "restroom", "洗手門", "名詞"], [14, "sidewalk", "人行道", "名詞"],
+            [14, "town", "城鎮", "名詞"], [14, "business", "生意", "名詞"], [14, "hobby", "嗜好", "名詞"], [14, "knowledge", "知識", "名詞"], [14, "planet", "行星", "名詞"],
+            [14, "prize", "獎品", "名詞"], [14, "seat", "座位", "名詞"], [14, "tail", "尾巴", "名詞"], [14, "appear", "出現", "動詞"], [14, "arrive", "抵達", "動詞"],
+            [14, "belong", "屬於", "動詞"], [14, "cheer", "歡呼", "動詞"], [14, "clap", "拍手", "動詞"], [14, "cover", "覆蓋", "動詞"], [14, "invite", "邀請", "動詞"],
+            [14, "lead", "帶領", "動詞"], [14, "notice", "注意到", "動詞"], [14, "pack", "打包", "動詞"], [14, "blind", "盲的", "形容詞"], [14, "clear", "清楚的", "形容詞"],
+            [14, "foreign", "外國的", "形容詞"], [14, "glad", "高興的", "形容詞"], [14, "lazy", "懶惰的", "形容詞"], [14, "polite", "有禮貌的", "形容詞"], [14, "round", "圓形的", "形容詞"],
+            [14, "whole", "全部的", "形容詞"], [14, "belong to", "屬於", "片語"], [14, "hang out", "逛街；經常出入", "片語"], [14, "used to", "過去習慣於", "片語"],
+            [14, "Buy one get one free.", "買一送一。", "佳句"], [14, "What do you think?", "你認為呢？", "佳句"],
+
+            // ================= Unit 15 (第六冊全：人與行為、方向、進階動詞/形容詞/副詞/連接詞、核心片語與佳句) =================
+            [15, "leave", "休假；離開", "名詞/動詞"], [15, "deal", "交易；處理", "名詞/動詞"], [15, "power", "力量", "名詞"], [15, "leader", "領袖", "名詞"], [15, "queen", "皇后", "名詞"],
+            [15, "east", "東方", "名詞/形容詞"], [15, "north", "北方", "名詞/形容詞"], [15, "south", "南方", "名詞/形容詞"], [15, "west", "西方", "名詞/形容詞"], [15, "office", "辦公室", "名詞"],
+            [15, "package", "包裹", "名詞"], [15, "blanket", "毯子", "名詞"], [15, "case", "盒子；案例", "名詞"], [15, "point", "點；分數", "名詞"], [15, "paint", "顏料", "名詞/動詞"],
+            [15, "language", "語言", "名詞"], [15, "voice", "聲音", "名詞"], [15, "word", "字", "名詞"], [15, "course", "課程", "名詞"], [15, "century", "世紀", "名詞"],
+            [15, "butterfly", "蝴蝶", "名詞"], [15, "stomach", "胃", "名詞"], [15, "sight", "視線；景象", "名詞"], [15, "camp", "露營", "動詞/名詞"], [15, "correct", "更正；正確的", "動詞/形容詞"],
+            [15, "cross", "跨越", "動詞"], [15, "fry", "油炸；油煎", "動詞"], [15, "tie", "打結；繫", "動詞/名詞"], [15, "repeat", "重複", "動詞"], [15, "row", "划船；排", "動詞/名詞"],
+            [15, "store", "儲存；商店", "動詞/名詞"], [15, "tidy", "整理；整潔的", "動詞/形容詞"], [15, "down", "沮喪的；向下", "形容詞/副詞"], [15, "lonely", "寂寞的；孤獨的", "形容詞"],
+            [15, "married", "已婚的；有配偶的", "形容詞"], [15, "national", "國家的，國民的", "形容詞"], [15, "shy", "害羞的", "形容詞"], [15, "stupid", "愚蠢的", "形容詞"],
+            [15, "quite", "相當地", "副詞"], [15, "as long as", "只要~", "連接詞"], [15, "as soon as", "一~ 就~", "連接詞"], [15, "neither... nor...", "既不~ 也不~", "連接詞"],
+            [15, "not only... but also...", "不但~ 而且~", "連接詞"], [15, "according to", "根據", "片語"], [15, "act on", "執行；落實", "片語"], [15, "at the crossroads", "處於關鍵時刻", "片語"],
+            [15, "base on", "根據", "片語"], [15, "be about to", "將要", "片語"], [15, "be different from", "不同於～", "片語"], [15, "be into", "熱衷某事物", "片語"],
+            [15, "burn down", "燃燒殆盡；燒光", "片語"], [15, "by now", "到此刻為止", "片語"], [15, "cheer up", "振作起來", "片語"], [15, "come to an end", "將要結束", "片語"],
+            [15, "count on", "依靠；指望", "片語"], [15, "cut off", "中斷；切斷", "片語"], [15, "dry off", "變乾", "片語"], [15, "for a rainy day", "以備不時之需", "片語"],
+            [15, "give away", "分送", "片語"], [15, "give it a try", "嘗試一下", "片語"], [15, "study abroad", "出國留學", "片語"], [15, "Knowledge is power.", "知識就是力量。", "佳句"]
+        ];
+
+        // 自動解構轉譯成結構化物件
+        const vocabularyData = rawVocabData.map(item => ({
+            unit: item[0],
+            word: item[1],
+            meaning: item[2],
+            category: item[3]
+        }));
+
+        // --- 狀態管理變數 ---
+        let currentQuestions = [];
+        let currentIndex = 0;
+        let score = 0;
+        let streak = 0;
+        let selectedCount = 5;
+        let selectedUnit = 'all';
+        let wrongAnswers = [];
+        let isAnswered = false;
+        let autoNextTimer = null;
+
+        // SpeechSynthesis 發音元件
+        const synth = window.speechSynthesis;
+
+        // DOM 元素引用
+        const setupScreen = document.getElementById('setup-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const countButtons = document.querySelectorAll('.count-btn');
+        const unitSelect = document.getElementById('unit-select');
+        const startBtn = document.getElementById('start-btn');
+
+        const progressText = document.getElementById('progress-text');
+        const progressBar = document.getElementById('progress-bar');
+        const scoreText = document.getElementById('score-text');
+        const streakTag = document.getElementById('streak-tag');
+        const streakCount = document.getElementById('streak-count');
+        const badgeMode = document.getElementById('badge-mode');
+
+        const wordTitle = document.getElementById('word-title');
+        const wordCategory = document.getElementById('word-category');
+        const speakWordBtn = document.getElementById('speak-word-btn');
+        const optionsContainer = document.getElementById('options-container');
+
+        const finalScore = document.getElementById('final-score');
+        const finalAccuracy = document.getElementById('final-accuracy');
+        const mistakesContainer = document.getElementById('mistakes-container');
+        const mistakesList = document.getElementById('mistakes-list');
+        const restartBtn = document.getElementById('restart-btn');
+
+        // 初始化與事件綁定
+        window.addEventListener('DOMContentLoaded', () => {
+            initCountButtons();
+            startBtn.addEventListener('click', startQuiz);
+            restartBtn.addEventListener('click', resetQuiz);
+
+            speakWordBtn.addEventListener('click', () => {
+                const current = currentQuestions[currentIndex];
+                if (current) playSpeech(current.word, speakWordBtn);
+            });
+        });
+
+        // 選擇題數按鈕事件
+        function initCountButtons() {
+            countButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    countButtons.forEach(b => {
+                        b.classList.remove('active', 'bg-sky-500', 'text-white', 'shadow-md', 'shadow-sky-200');
+                        b.classList.add('bg-white', 'text-slate-600', 'border-sky-200');
+                    });
+                    btn.classList.add('active', 'bg-sky-500', 'text-white', 'shadow-md', 'shadow-sky-200');
+                    btn.classList.remove('bg-white', 'text-slate-600');
+                    selectedCount = parseInt(btn.dataset.count);
+                });
+            });
+        }
+
+        // 開始測驗邏輯
+        function startQuiz() {
+            if (autoNextTimer) {
+                clearTimeout(autoNextTimer);
+                autoNextTimer = null;
+            }
+
+            selectedUnit = unitSelect.value;
+            let filtered = vocabularyData;
+
+            if (selectedUnit === 'all') {
+                filtered = vocabularyData;
+                if (badgeMode) badgeMode.innerHTML = `<i class="fa-solid fa-book-open mr-1"></i> Unit 1 ~ 15 全題庫`;
+            } else if (selectedUnit.includes('-')) {
+                // 處理 5 個單元隨機混合 (例如 "1-5", "6-10", "11-15")
+                const [start, end] = selectedUnit.split('-').map(Number);
+                filtered = vocabularyData.filter(item => item.unit >= start && item.unit <= end);
+                if (badgeMode) badgeMode.innerHTML = `<i class="fa-solid fa-book-open mr-1"></i> Unit ${start} ~ ${end}`;
+            } else {
+                // 個別單元測驗
+                const unitNum = parseInt(selectedUnit);
+                filtered = vocabularyData.filter(item => item.unit === unitNum);
+                if (badgeMode) badgeMode.innerHTML = `<i class="fa-solid fa-book-open mr-1"></i> Unit ${unitNum}`;
+            }
+
+            if (filtered.length < 4) {
+                // 如果單元題目較少，混合其他題目補充
+                filtered = [...filtered, ...vocabularyData.filter(i => !filtered.includes(i))];
+            }
+
+            // 洗牌並取出指定的題數
+            const shuffled = shuffleArray([...filtered]);
+            currentQuestions = shuffled.slice(0, Math.min(selectedCount, shuffled.length));
+
+            currentIndex = 0;
+            score = 0;
+            streak = 0;
+            wrongAnswers = [];
+
+            setupScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+
+            renderQuestion();
+        }
+
+        // 渲染目前題目
+        function renderQuestion() {
+            if (autoNextTimer) {
+                clearTimeout(autoNextTimer);
+                autoNextTimer = null;
+            }
+
+            isAnswered = false;
+            const item = currentQuestions[currentIndex];
+
+            // 更新標題與資訊
+            progressText.innerText = `第 ${currentIndex + 1} / ${currentQuestions.length} 題`;
+            progressBar.style.width = `${((currentIndex) / currentQuestions.length) * 100}%`;
+            scoreText.innerHTML = `<i class="fa-solid fa-star text-amber-400"></i> 得分: ${score}`;
+
+            if (streak > 1) {
+                streakTag.classList.remove('hidden');
+                streakCount.innerText = streak;
+            } else {
+                streakTag.classList.add('hidden');
+            }
+
+            wordTitle.innerText = item.word;
+            wordCategory.innerText = `Unit ${item.unit} • ${item.category}`;
+
+            // 自動朗讀單字
+            setTimeout(() => {
+                playSpeech(item.word, speakWordBtn);
+            }, 300);
+
+            // 生成 4 個選項 (1 正確 + 3 誘答)
+            const distractors = getRandomDistractors(item, 3);
+            const options = shuffleArray([item, ...distractors]);
+
+            optionsContainer.innerHTML = '';
+            options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `option-btn w-full text-left bg-white border-2 border-sky-100 hover:border-sky-300 rounded-2xl p-4 font-bold text-slate-700 shadow-sm flex items-center justify-between group`;
+                btn.innerHTML = `
+                    <span class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-sm font-bold border border-sky-200 group-hover:bg-sky-500 group-hover:text-white transition">
+                            ${String.fromCharCode(65 + idx)}
+                        </span>
+                        <span class="text-base">${opt.meaning}</span>
+                    </span>
+                    <i class="fa-regular fa-circle text-sky-200 text-lg group-hover:text-sky-400"></i>
+                `;
+                btn.addEventListener('click', () => handleAnswer(opt, item, btn));
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        // 處理作答選擇
+        function handleAnswer(selected, correct, selectedBtn) {
+            if (isAnswered) return;
+            isAnswered = true;
+
+            const allButtons = optionsContainer.querySelectorAll('button');
+            allButtons.forEach(btn => btn.disabled = true);
+
+            const isCorrect = selected.meaning === correct.meaning;
+
+            if (isCorrect) {
+                // 答對處理：高亮綠色，停留 1 秒自動跳下一題
+                score += 10;
+                streak++;
+                selectedBtn.className = `option-btn w-full text-left bg-emerald-50 border-2 border-emerald-400 rounded-2xl p-4 font-bold text-emerald-800 shadow-sm flex items-center justify-between`;
+                selectedBtn.querySelector('i').className = `fa-solid fa-circle-check text-emerald-500 text-xl`;
+
+                autoNextTimer = setTimeout(() => {
+                    nextQuestion();
+                }, 1000);
+            } else {
+                // 答錯處理：標示錯誤紅色與正確答案，停留 2 秒自動跳下一題
+                streak = 0;
+                wrongAnswers.push(correct);
+
+                selectedBtn.className = `option-btn w-full text-left bg-rose-50 border-2 border-rose-400 rounded-2xl p-4 font-bold text-rose-800 shadow-sm flex items-center justify-between`;
+                selectedBtn.querySelector('i').className = `fa-solid fa-circle-xmark text-rose-500 text-xl`;
+
+                // 標示正確選項
+                allButtons.forEach(btn => {
+                    if (btn.innerText.includes(correct.meaning)) {
+                        btn.className = `option-btn w-full text-left bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-4 font-bold text-emerald-700 shadow-sm flex items-center justify-between`;
+                        btn.querySelector('i').className = `fa-solid fa-circle-check text-emerald-500 text-xl`;
+                    }
+                });
+
+                autoNextTimer = setTimeout(() => {
+                    nextQuestion();
+                }, 2000);
+            }
+        }
+
+        // 下一題或進入結算
+        function nextQuestion() {
+            currentIndex++;
+            if (currentIndex < currentQuestions.length) {
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        // 結算頁面展示
+        function showResults() {
+            if (autoNextTimer) {
+                clearTimeout(autoNextTimer);
+                autoNextTimer = null;
+            }
+
+            progressBar.style.width = "100%";
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            const total = currentQuestions.length;
+            const correctCount = total - wrongAnswers.length;
+            const accuracyPercent = Math.round((correctCount / total) * 100);
+
+            finalScore.innerText = `${accuracyPercent}%`;
+            finalAccuracy.innerText = `${correctCount} / ${total}`;
+
+            // 觸發多層次「純藍色系」灑花
+            triggerBlueConfetti();
+
+            // 播放歡呼音效
+            playCheerSound();
+
+            // 處理錯題檢討清單
+            if (wrongAnswers.length > 0) {
+                mistakesContainer.classList.remove('hidden');
+                mistakesList.innerHTML = '';
+                wrongAnswers.forEach(item => {
+                    const row = document.createElement('div');
+                    row.className = `bg-white border border-sky-100 rounded-xl p-3 flex items-center justify-between text-sm shadow-sm`;
+                    row.innerHTML = `
+                        <div>
+                            <span class="font-bold text-slate-800">${item.word}</span>
+                            <span class="text-xs text-sky-500 ml-2 font-medium">Unit ${item.unit}</span>
+                            <p class="text-xs text-slate-500 mt-0.5">${item.meaning}</p>
+                        </div>
+                        <button class="review-speak-btn text-sky-500 hover:text-sky-700 bg-sky-50 hover:bg-sky-100 p-2 rounded-lg transition" title="聽發音">
+                            <i class="fa-solid fa-volume-low"></i>
+                        </button>
+                    `;
+                    row.querySelector('.review-speak-btn').addEventListener('click', () => playSpeech(item.word));
+                    mistakesList.appendChild(row);
+                });
+            } else {
+                mistakesContainer.classList.add('hidden');
+            }
+        }
+
+        // 重置測驗
+        function resetQuiz() {
+            if (autoNextTimer) {
+                clearTimeout(autoNextTimer);
+                autoNextTimer = null;
+            }
+            resultScreen.classList.add('hidden');
+            setupScreen.classList.remove('hidden');
+        }
+
+        // --- 純藍色系 Confetti 灑花效果 (小桃限定調色) ---
+        function triggerBlueConfetti() {
+            if (typeof confetti !== 'function') return;
+
+            // 純藍色調組合: 極淺雪藍, 天空藍, 寶藍, 皇家純藍, 經典純藍, 靛藍
+            const bluePalette = ['#e0f2fe', '#7dd3fc', '#38bdf8', '#0284c7', '#0052cc', '#0033ff', '#0000d1'];
+
+            // 第一波雙側發射
+            confetti({
+                particleCount: 60,
+                spread: 70,
+                origin: { y: 0.6, x: 0.2 },
+                colors: bluePalette
+            });
+            confetti({
+                particleCount: 60,
+                spread: 70,
+                origin: { y: 0.6, x: 0.8 },
+                colors: bluePalette
+            });
+
+            // 第二波中央高空漫天降落
+            setTimeout(() => {
+                confetti({
+                    particleCount: 80,
+                    angle: 90,
+                    spread: 100,
+                    origin: { y: 0.4 },
+                    colors: bluePalette,
+                    scalar: 1.2
+                });
+            }, 250);
+        }
+
+        // --- Web Audio API 歡呼與勝利音效合成 ---
+        function playCheerSound() {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+
+                // 1. 勝利短音階 (Fanfare Melody: C5 -> E5 -> G5 -> C6)
+                const notes = [
+                    { f: 523.25, start: 0, duration: 0.15 },    // C5
+                    { f: 659.25, start: 0.15, duration: 0.15 },  // E5
+                    { f: 783.99, start: 0.3, duration: 0.15 },   // G5
+                    { f: 1046.50, start: 0.45, duration: 0.65 }  // C6
+                ];
+
+                notes.forEach(note => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.value = note.f;
+
+                    gain.gain.setValueAtTime(0, ctx.currentTime + note.start);
+                    gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + note.start + 0.03);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + note.start + note.duration);
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+
+                    osc.start(ctx.currentTime + note.start);
+                    osc.stop(ctx.currentTime + note.start + note.duration);
+                });
+
+                // 2. 人群歡呼與掌聲模擬聲 (Filtered Noise)
+                const bufferSize = ctx.sampleRate * 2.0; // 2 秒音訊
+                const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1; // 白雜訊
+                }
+
+                const noise = ctx.createBufferSource();
+                noise.buffer = buffer;
+
+                // 帶通濾波器：調製成類似歡呼掌聲的頻率
+                const filter = ctx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.value = 1400;
+                filter.Q.value = 1.2;
+
+                const noiseGain = ctx.createGain();
+                noiseGain.gain.setValueAtTime(0, ctx.currentTime + 0.2);
+                noiseGain.gain.linearRampToValueAtTime(0.22, ctx.currentTime + 0.5);
+                noiseGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2.0);
+
+                noise.connect(filter);
+                filter.connect(noiseGain);
+                noiseGain.connect(ctx.destination);
+
+                noise.start(ctx.currentTime + 0.2);
+                noise.stop(ctx.currentTime + 2.0);
+            } catch (e) {
+                console.log("Audio play error:", e);
+            }
+        }
+
+        // 英文語音朗讀函式 (Web Speech API)
+        function playSpeech(text, buttonEl = null) {
+            if (!('speechSynthesis' in window)) return;
+
+            synth.cancel(); // 停止先前的發音
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9; // 稍微放慢語速
+
+            if (buttonEl) {
+                buttonEl.classList.add('speaking-active');
+                utterance.onend = () => buttonEl.classList.remove('speaking-active');
+                utterance.onerror = () => buttonEl.classList.remove('speaking-active');
+            }
+
+            synth.speak(utterance);
+        }
+
+        // 輔助工具: 取得隨機誘答選項
+        function getRandomDistractors(correctItem, count) {
+            const pool = vocabularyData.filter(item => item.meaning !== correctItem.meaning);
+            return shuffleArray(pool).slice(0, count);
+        }
+
+        // 輔助工具: 洗牌演算法 (Fisher-Yates)
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+    </script>
+</body>
+</html>
